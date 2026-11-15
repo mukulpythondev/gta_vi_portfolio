@@ -4,7 +4,7 @@
 
 **A developer portfolio you play.** An original open-world, neon-sunset game UI built on Next.js 16, with a one-click Recruiter mode for people who just want the facts.
 
-[Live site](#) · [Docs](docs/README.md) · [Portfolio builder skill](skills/portfolio-builder/README.md) · [Learn how it's built](docs/learning/README.md)
+[Live site](https://gta-vi-portfolio.vercel.app/) · [Docs](docs/README.md) · [Portfolio builder skill](skills/portfolio-builder/README.md) · [Learn how it's built](docs/learning/README.md)
 
 </div>
 
