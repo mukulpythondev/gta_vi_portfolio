@@ -1,0 +1,14 @@
+# Local snapshots and backups (not part of the project)
+/_*.tgz
+/web_src.tgz
+/_backup_before_revamp/
+
+# Raw Gemini art (~175 MB) stays local; the site uses the optimised copies in
+# web/public, regenerated with `npm run art` in web/.
+/art-raw/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,71 @@
+import type { TimelineItem, Pending } from "./types";
+export const timeline: TimelineItem[] = [
+  {
+    date: "2023",
+    code: "DEL",
+    place: "Ghaziabad, Delhi NCR",
+    kind: "Study",
+    title: "Started B.Tech in Computer Science",
+    description: "IMS Engineering College. Data structures, operating systems, DBMS, networks and AI.",
+  },
+  {
+    date: "Sep 2024",
+    code: "RMT",
+    place: "Remote",
+    kind: "Work",
+    title: "First remote role at IABTM",
+    description: "Full stack intern building REST APIs and real-time messaging.",
+  },
+  {
+    date: "2025",
+    code: "CCJ",
+    place: "NIT Calicut",
+    kind: "Hackathon",
+    title: "Smart India Hackathon National Finalist",
+    description: "Flew to the Grand Finale with an offline multimodal RAG system: no network, cited answers.",
+  },
+  {
+    date: "Sep 2025",
+    code: "RMT",
+    place: "Remote",
+    kind: "Work",
+    title: "Software engineering intern at ASR Aviation",
+    description: "Profiled slow queries and endpoints, then containerised services on Kubernetes.",
+  },
+  {
+    date: "Nov 2025",
+    code: "BLR",
+    place: "Bengaluru",
+    kind: "Hackathon",
+    title: "Cardano Hackathon Asia finalist",
+    description: "Reached the Asia finals in Bengaluru.",
+  },
+  {
+    date: "Dec 2025",
+    code: "SYD",
+    place: "Remote, Australia",
+    kind: "Work",
+    title: "Software Engineer at FirstHuman Tech",
+    description: "Retrieval over 5,000+ enterprise documents, handwriting OCR, and a Kafka pipeline that replays safely.",
+  },
+  {
+    date: "Aug 2026",
+    code: "PNQ",
+    place: "IIIT Pune",
+    kind: "Hackathon",
+    title: "Hackathon judge at IIIT Pune",
+    description: "Judged Hack Better Than Me, from the other side of the table.",
+  },
+  {
+    date: "2027",
+    code: "DEL",
+    place: "Delhi NCR",
+    kind: "Milestone",
+    title: "Graduation (expected)",
+    description: "B.Tech, Computer Science.",
+  },
+];
+export const timelinePlaceholder: Pending = {
+  status: "pending",
+  note: "Career milestones will appear here once their dates are verified.",
+};

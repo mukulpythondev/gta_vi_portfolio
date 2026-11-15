@@ -1,0 +1,98 @@
+/* ================================================================
+   Phone layout pass (loaded last so it wins over earlier sheets).
+   Breakpoints: 760px = phones and small tablets, 420px = narrow phones.
+   ================================================================ */
+
+@media (max-width: 760px) {
+  /* Footer: four calls to action as an even 2 x 2 grid. */
+  .footer-cta h2 { font-size: clamp(38px, 11vw, 56px); }
+  .footer-cta > p:not(.eyebrow) { font-size: 16px; }
+  .footer-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .footer-actions .button {
+    justify-content: center;
+    min-height: 48px;
+    padding-inline: 12px;
+  }
+  .footer-actions .button { font-size: 16px; white-space: nowrap; }
+  .footer .footer-brand { font-size: 34px; }
+  .footer-links a { font-size: 18px; }
+  .footer-links a:hover { transform: none; }
+
+  /* Story mode: the stamp sits in the card corner instead of
+     reserving an empty block under every chapter. */
+  .story-mission article { padding: 16px 16px 44px; }
+  .mission-stamp {
+    position: absolute;
+    right: 14px;
+    bottom: 10px;
+    top: auto;
+    justify-items: end;
+    margin: 0;
+    font-size: 17px;
+    line-height: 1;
+  }
+  .mission-stamp small { display: none; }
+  .mission-meta { gap: 6px 14px; }
+
+  /* Armory: two cards per row so twelve weapons are not a
+     two-screen scroll. An opened card takes the full row. */
+  .inventory-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .skill-item[open] { grid-column: 1 / -1; }
+  .skill-item summary { padding: 12px; gap: 8px; }
+  .skill-item strong { font-size: 17px; }
+  .skill-item summary .card-art { height: 38px; padding: 4px 6px; }
+
+  /* World map: smaller HUD strip so it does not cover the top markers. */
+  .map-hud-top { font-size: 11px; letter-spacing: 0.08em; padding: 10px 12px; }
+
+  /* Gallery: filters as one scrollable row instead of a wrapped box.
+     The camera frame gets less padding so photos use the width. */
+  .viewfinder { grid-template-columns: minmax(0, 1fr); padding: 34px 14px 20px; }
+  .vf-corner { inset: 8px; }
+  .vf-rec { top: 12px; right: 18px; }
+  .filter-toolbar { min-width: 0; }
+  .filter-toolbar .filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+    scrollbar-width: none;
+  }
+  .filter-toolbar .filters::-webkit-scrollbar { display: none; }
+  .filters button { flex: none; padding: 8px 14px; font-size: 14px; }
+
+  /* Long words in display headings must wrap, never overflow. */
+  .page-heading h1,
+  main h1 { overflow-wrap: break-word; }
+
+  /* Readable floor for tiny labels. */
+  .map-marker small,
+  .district-status,
+  .armory-slot small,
+  .skill-item small,
+  .timeline small { font-size: 11px; }
+  .mission-head { font-size: 11px; letter-spacing: 0.12em; }
+
+  /* Save slots (home + experience): status pill stays on one line. */
+  .slot-status { white-space: nowrap; letter-spacing: 0.12em; }
+
+  /* Tap targets: links in dense lists get at least 44px of height. */
+  .related-ops a,
+  .district-list a { min-height: 48px; }
+}
+
+@media (max-width: 420px) {
+  .save-slot { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; padding: 16px 14px 16px 12px; }
+  .slot-number { font-size: 34px; }
+  .slot-body strong { font-size: 26px; }
+  .slot-bar { display: none; }
+  .slot-side { grid-template-columns: auto 1fr auto; }
+  .footer-actions .button { gap: 6px; padding-inline: 8px; }
+  .footer-links { gap: 20px 24px; }
+  .footer-links a { font-size: 17px; }
+  .contact-status { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .contact-status div { padding: 10px 12px; }
+}

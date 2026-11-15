@@ -1,0 +1,15 @@
+.scene { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.scene svg { display: block; width: 100%; height: 100%; }
+.scene-placeholder { background: linear-gradient(180deg, var(--sky-top), var(--sky-mid) 60%, var(--sky-low)); }
+
+/* Moving objects (cars here; swap for the theme's motif): transform-only loops, spread out from the first frame with negative delays. */
+.fs-car-a { animation: fs-right 20s linear infinite; }
+.fs-car-c { animation: fs-right 20s linear infinite -10s; }
+.fs-car-b { animation: fs-left 19s linear infinite -6s; }
+@keyframes fs-right { from { transform: translateX(-220px); } to { transform: translateX(1820px); } }
+@keyframes fs-left  { from { transform: translateX(1820px); } to { transform: translateX(-220px); } }
+
+:root[data-motion="off"] .scene *,
+[data-mode="plain"] .scene * { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .scene * { animation: none !important; } }
+[data-offscreen], [data-offscreen] * { animation-play-state: paused !important; }

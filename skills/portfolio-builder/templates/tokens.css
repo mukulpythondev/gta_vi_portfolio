@@ -1,0 +1,51 @@
+/* Design tokens. Fill every value from the theme sheet (references/themes.md).
+   The defaults are a neutral dark theme so the scaffold renders before theming. */
+:root {
+  /* surfaces */
+  --bg: #0f1115;
+  --bg-2: #161922;
+  --panel: rgb(24 27 36 / 0.82);
+  --panel-solid: #1b1f2a;
+  --line: rgb(255 255 255 / 0.12);
+  --line-strong: rgb(255 255 255 / 0.24);
+
+  /* text (keep 4.5:1 contrast on --panel) */
+  --text: #f3f4f7;
+  --muted: #b9bfcc;
+  --dim: #8c93a3;
+
+  /* accents */
+  --accent: #ffb000;
+  --accent-2: #e4007c;
+  --accent-3: #00b3a4;
+
+  /* backdrop gradient for hero and scenes */
+  --sky-top: #1d1a3a;
+  --sky-mid: #6b2a5e;
+  --sky-low: #e07a3a;
+
+  /* glow or shadow, depending on the theme's material */
+  --glow-1: 0 0 8px color-mix(in srgb, var(--accent) 65%, transparent), 0 0 28px color-mix(in srgb, var(--accent) 35%, transparent);
+  --glow-2: 0 0 8px color-mix(in srgb, var(--accent-2) 60%, transparent), 0 0 26px color-mix(in srgb, var(--accent-2) 30%, transparent);
+
+  /* shape */
+  --radius: 14px;
+  --radius-sm: 9px;
+
+  /* motion */
+  --ease-snap: cubic-bezier(0.2, 0.9, 0.1, 1);
+  --ease-cine: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-micro: 160ms;
+  --t-panel: 320ms;
+  --t-cine: 1100ms;
+
+  /* layout */
+  --header-h: 68px;
+  --gutter: clamp(18px, 4vw, 56px);
+  --max: 1320px;
+}
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --font-sans: var(--font-body);
+}

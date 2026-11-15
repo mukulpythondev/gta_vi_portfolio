@@ -1,0 +1,267 @@
+/* UX feedback pass (2026-11-10): less on screen, work you can see, small bug fixes. */
+
+/* ---------- Boot: the hero shows through, tip never under the buttons ---------- */
+.boot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  background:
+    linear-gradient(160deg, rgb(58 12 163 / 0.55), rgb(255 46 136 / 0.28) 55%, rgb(255 178 56 / 0.2)),
+    rgb(7 5 13 / 0.72);
+}
+.boot-center {
+  margin-block: auto;
+}
+.boot-tip {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  flex-shrink: 0;
+  margin: 8px 0 24px;
+  padding: 0 16px;
+}
+/* Paint the title at once (it is the largest text); only slide it in. */
+.boot-title {
+  animation-name: boot-slide;
+}
+@keyframes boot-slide {
+  from { transform: translateY(12px); }
+}
+@media (max-height: 560px) {
+  .boot-center { gap: 2px; padding: 56px 16px 8px; }
+  .boot-badge { width: 44px; height: 44px; font-size: 20px; border-radius: 12px; }
+  .boot-presents { margin-top: 8px; }
+  .boot-title { font-size: clamp(44px, 15vh, 90px); }
+  .boot-progress,
+  .boot-start { margin-top: 14px; }
+  .boot-tip { margin-bottom: 12px; }
+}
+
+/* ---------- Objective chip: folded state fits its stars ---------- */
+.objective-label {
+  gap: 10px;
+  white-space: nowrap;
+}
+.rep {
+  flex-shrink: 0;
+}
+.objective.is-folded:not(:hover, :focus-within) {
+  width: max-content;
+  max-width: 240px;
+}
+
+/* ---------- Pause menu carries the clock now ---------- */
+.pause-side .hud-clock {
+  display: inline-flex;
+  justify-self: start;
+  align-self: start;
+  width: max-content;
+  margin: -4px 0 8px;
+}
+
+/* ---------- Architecture diagrams ---------- */
+.arch-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.arch-box {
+  fill: rgb(14 8 32 / 0.85);
+  stroke: color-mix(in srgb, var(--accent, var(--neon-cyan)) 70%, transparent);
+  stroke-width: 1.5;
+}
+.arch-entry {
+  stroke: var(--neon-orange);
+  stroke-width: 2;
+}
+.arch-label {
+  fill: #f3eefe;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+}
+.arch-step {
+  fill: var(--neon-orange);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.arch-edge {
+  fill: none;
+  stroke: color-mix(in srgb, var(--accent, var(--neon-cyan)) 80%, white 0%);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+.arch-head {
+  fill: var(--accent, var(--neon-cyan));
+}
+.arch-figure {
+  margin: 14px 0 18px;
+  padding: clamp(12px, 2vw, 22px);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 32px),
+    rgb(10 6 24 / 0.6);
+}
+.arch-figure figcaption {
+  margin-top: 14px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.arch-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.arch-tall { display: none; max-width: 300px; margin: 0 auto; }
+@media (max-width: 640px) {
+  .arch-wide { display: none; }
+  .arch-tall { display: block; }
+}
+
+/* Card art: the project's own diagram instead of a shared placeholder. */
+.project-art.has-diagram {
+  padding: 46px 18px 34px;
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 28px),
+    radial-gradient(circle at 75% 20%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 60%),
+    linear-gradient(160deg, #1d0d3d, #0d0820);
+}
+.project-art.has-diagram .arch-diagram {
+  align-self: center;
+  max-height: 100%;
+}
+.project-proof {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 6px;
+}
+.project-proof span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgb(7 5 13 / 0.85);
+  border: 1px solid #34e27a;
+  color: #34e27a;
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Detail page: clip or screenshot first. */
+.detail-visual {
+  display: grid;
+  gap: 12px;
+}
+.detail-clip {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  background: #000;
+  border: 1px solid var(--line-strong);
+}
+.detail-shot {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--line-strong);
+  background: #0d0820;
+}
+.detail-shot img {
+  object-fit: cover;
+  object-position: top;
+}
+.detail-screens {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+/* Featured project: the product, not a team photo. */
+.spotlight-visual {
+  display: grid;
+  gap: 12px;
+  --accent: var(--neon-cyan);
+}
+.spotlight-visual .arch-diagram {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid rgb(24 240 255 / 0.3);
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 30px),
+    rgb(10 6 24 / 0.7);
+}
+.spotlight-shot {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgb(24 240 255 / 0.3);
+}
+.spotlight-shot img { object-fit: cover; object-position: top; }
+.spotlight-visual .spotlight-stamp {
+  margin-top: 0;
+  justify-self: start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(255 178 56 / 0.12);
+  border: 1px solid rgb(255 178 56 / 0.5);
+  color: var(--neon-orange);
+}
+
+/* ---------- Photo reel: shows that it scrolls ---------- */
+.scroll-rail {
+  position: relative;
+}
+.scroll-rail::before,
+.scroll-rail::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 24px;
+  width: 72px;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 200ms;
+}
+.scroll-rail::before { left: 0; background: linear-gradient(90deg, var(--ink), transparent); }
+.scroll-rail::after { right: 0; background: linear-gradient(270deg, var(--ink), transparent); }
+.scroll-rail.at-start::before,
+.scroll-rail.at-end::after { opacity: 0; }
+.scroll-rail-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.scroll-rail-count {
+  margin-right: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.scroll-rail-controls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Footer scene placeholder until the drawn street loads. */
+.ocean-drive-placeholder {
+  background: linear-gradient(180deg, #1a0838, #6b1a6e 45%, #ff4f7b 72%, #ffae5c 85%, #2a1240);
+}

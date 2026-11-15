@@ -1,0 +1,219 @@
+/* ---------- Responsive ---------- */
+@media (max-width: 1180px) {
+  .desktop-nav { display: none; }
+  .objective { display: none; }
+}
+@media (max-width: 1599px) {
+  .minimap { display: none; }
+}
+@media (max-width: 1000px) {
+  .map-layout,
+  .compact-map,
+  .detail-layout,
+  .about-layout,
+  .contact-layout,
+  .profile-preview {
+    grid-template-columns: 1fr;
+  }
+  .dossier { position: static; }
+  .character-teaser { max-width: 360px; }
+  .phone { max-width: 360px; justify-self: center; }
+  .minimap { display: none; }
+}
+@media (max-width: 760px) {
+  .hud {
+    inset: 8px 8px auto;
+    height: 58px;
+    --hud-h: 58px;
+    padding: 0 8px 0 10px;
+  }
+  .brand-caption small,
+  .optional-tool,
+  .resume-hud,
+  .hud-clock {
+    display: none;
+  }
+  .brand-caption { font-size: 15px; }
+  .brand-monogram { width: 38px; height: 38px; font-size: 17px; }
+  .mode-button span { display: none; }
+  .mode-button { width: 42px; padding: 0; justify-content: center; }
+  .mobile-dock {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 6px;
+    border-radius: 18px;
+    background: rgb(14 8 32 / 0.92);
+    border: 1px solid var(--line-strong);
+  }
+  .mobile-dock a,
+  .mobile-dock button {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    padding: 6px 0;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .mobile-dock [aria-current="page"] {
+    background: rgb(255 46 136 / 0.18);
+    color: var(--neon-pink);
+  }
+  .desktop-break { display: none; }
+  .hero { padding-top: 100px; padding-bottom: 96px; }
+  .hero-topline span:last-child,
+  .hero-location { display: none; }
+  .hero-shade {
+    background:
+      linear-gradient(180deg, rgb(7 5 13 / 0.45), rgb(7 5 13 / 0.55) 60%, var(--bg) 100%);
+  }
+  .section { padding-top: 80px; }
+  .rail { grid-auto-columns: 84%; }
+  .inner-page { padding-top: 96px; }
+  .page-heading { padding: 22px 20px 26px; }
+  .contact-band { flex-direction: column; align-items: flex-start; margin: 80px 12px 0; padding: 36px 24px; }
+  .contact-arrow { width: 96px; height: 96px; }
+  .footer { grid-template-columns: 1fr; padding-bottom: 110px; }
+  .detail-section { padding: 20px; }
+  .map-intel { position: static; width: auto; border-radius: 0; border-width: 1px 0 0 3px; }
+  .map-controls { top: 44px; }
+  .wheel {
+    aspect-ratio: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .wheel::before,
+  .wheel-centre { display: none; }
+  .wheel-slot {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    transform: none;
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    text-align: left;
+    gap: 10px;
+    padding: 12px;
+  }
+  .wheel-slot.is-active { scale: 1; }
+  .pause-dialog[open] { grid-template-columns: 1fr; }
+  .pause-side { border-right: 0; border-bottom: 1px solid var(--line); }
+  .pause-side h2 { font-size: 40px; }
+  .pause-main { max-height: none; }
+  .station-dial { grid-template-columns: repeat(2, 1fr); }
+  .toasts { top: auto; bottom: 86px; right: auto; left: 50%; transform: translateX(-50%); }
+  .marker-pin { width: 30px; height: 30px; }
+  .marker-pin svg { width: 13px; height: 13px; }
+  .map-marker small { font-size: 9.5px; padding: 1px 5px; }
+  .timeline li { grid-template-columns: 1fr; }
+}
+
+/* ---------- Recruiter Mode: same content, no game layer ---------- */
+.world[data-mode="recruiter"] .sunset-scene,
+.world[data-mode="recruiter"] .hero-grain,
+.world[data-mode="recruiter"] .hero-scan,
+.world[data-mode="recruiter"] .hero-bottom,
+.world[data-mode="recruiter"] .hero-topline,
+.world[data-mode="recruiter"] .hero-welcome,
+.world[data-mode="recruiter"] .ticker-x,
+.world[data-mode="recruiter"] .map-section,
+.world[data-mode="recruiter"] .character-teaser,
+.world[data-mode="recruiter"] .mission-status,
+.world[data-mode="recruiter"] .reticle,
+.world[data-mode="recruiter"] .toasts,
+.world[data-mode="recruiter"] .trophy-case,
+.world[data-mode="recruiter"] .locked-slots,
+.world[data-mode="recruiter"] .hud-corners,
+.world[data-mode="recruiter"] .vf-corner,
+.world[data-mode="recruiter"] .vf-rec,
+.world[data-mode="recruiter"] .status-stamp,
+.world[data-mode="recruiter"] .letterbox,
+.world[data-mode="recruiter"] .failed {
+  display: none;
+}
+.world[data-mode="recruiter"] .hero {
+  min-height: auto;
+  padding-top: calc(var(--hud-h) + 100px);
+  padding-bottom: 40px;
+  background: var(--bg-2);
+}
+.world[data-mode="recruiter"] .hero-shade {
+  display: none;
+}
+.world[data-mode="recruiter"] .hero h1 {
+  font-size: clamp(56px, 8vw, 96px);
+  font-style: normal;
+  display: flex;
+  gap: 0.25em;
+  flex-wrap: wrap;
+}
+.world[data-mode="recruiter"] .hero-name,
+.world[data-mode="recruiter"] .hero-name-2 {
+  background: none;
+  color: var(--text);
+  filter: none;
+  padding: 0;
+}
+.world[data-mode="recruiter"] .press-start,
+.world[data-mode="recruiter"] .contact-arrow {
+  animation: none;
+}
+.world[data-mode="recruiter"] .profile-preview {
+  grid-template-columns: 1fr;
+}
+.world[data-mode="recruiter"] .phone {
+  rotate: 0deg;
+}
+.world[data-mode="recruiter"] .page-heading h1,
+.world[data-mode="recruiter"] .intro-title {
+  text-shadow: none;
+  font-style: normal;
+}
+.world[data-mode="recruiter"] .inner-page {
+  padding-top: calc(var(--hud-h) + 90px);
+}
+
+/* ---------- Reduced motion / motion toggle off ---------- */
+/* Recruiter mode drops the ambient game motion (looping scenery, tickers, intros)
+   but keeps hover and focus transitions, so cards still respond to the pointer. */
+.world[data-mode="recruiter"] *,
+.world[data-mode="recruiter"] *::before,
+.world[data-mode="recruiter"] *::after {
+  animation: none !important;
+}
+.world[data-motion="off"] *,
+.world[data-motion="off"] *::before,
+.world[data-motion="off"] *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+}
+:root[data-motion="off"]::view-transition-group(*),
+:root[data-motion="off"]::view-transition-old(*),
+:root[data-motion="off"]::view-transition-new(*),
+:root[data-mode="recruiter"]::view-transition-group(*),
+:root[data-mode="recruiter"]::view-transition-old(*),
+:root[data-mode="recruiter"]::view-transition-new(*) {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  .scene-layer { transform: none !important; }
+}

@@ -1,0 +1,752 @@
+/* ---------- Cinematic scroll layer ----------
+   Hero zoom, statement, pinned project scenes, About collage, trophy hall and
+   card tilt. Every moving part is gated on game mode + motion on + no reduced
+   motion; without those the same content simply sits still. */
+
+/* Hero art starts slightly zoomed (Parallax settles it as you scroll), set here
+   too so the first frame matches before script runs. */
+@media (prefers-reduced-motion: no-preference) {
+  .world[data-mode="game"][data-motion="on"] .hero-art .layer-art {
+    transform: scale(1.1);
+    transform-origin: 70% 40%;
+  }
+}
+
+/* ---------- Statement: words light up as you scroll ---------- */
+.statement {
+  max-width: var(--max);
+  margin: clamp(90px, 13vw, 180px) auto clamp(60px, 9vw, 120px);
+  padding: 0 var(--gutter);
+}
+.statement-text {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(52px, 9.5vw, 160px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.st-line {
+  display: block;
+}
+.st-line:nth-child(2) { padding-left: 0.6em; }
+.st-line:nth-child(3) { padding-left: 1.2em; }
+.st-pink { color: var(--neon-pink); }
+.st-cyan { color: var(--neon-cyan); }
+.st-orange { color: var(--neon-orange); }
+.statement.is-live .st-word {
+  opacity: 0.12;
+  transition: opacity 450ms var(--ease-snap), text-shadow 450ms;
+}
+.statement.is-live .st-word.is-lit {
+  opacity: 1;
+}
+.statement.is-live .st-pink.is-lit { text-shadow: var(--glow-pink); }
+.statement.is-live .st-cyan.is-lit { text-shadow: var(--glow-cyan); }
+.statement.is-live .st-orange.is-lit { text-shadow: var(--glow-orange); }
+@media (max-width: 700px) {
+  .st-line:nth-child(n) { padding-left: 0; }
+}
+
+/* ---------- Pinned project scenes (GTA VI style) ---------- */
+.scenes-section {
+  margin-top: clamp(40px, 6vw, 80px);
+}
+.scenes-head {
+  padding-bottom: 28px;
+}
+.scenes-head h2 {
+  font-size: clamp(48px, 8vw, 112px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.88;
+}
+.scenes-head h2 > span {
+  color: var(--neon-cyan);
+}
+.scene {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 560px;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -30px 60px rgb(0 0 0 / 0.55);
+}
+.scene-art {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.scene-art img {
+  object-fit: cover;
+}
+/* No poster yet: the project's own flow diagram on the right, over an accent glow. */
+.scene-diagram {
+  display: grid;
+  place-items: center end;
+  padding: 120px var(--gutter) 80px 46%;
+  background:
+    radial-gradient(60% 70% at 75% 45%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.03) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.03) 0 1px, transparent 1px 40px),
+    var(--bg);
+}
+.scene-diagram .arch-diagram {
+  width: min(620px, 100%);
+  transform: scale(1.15);
+  transform-origin: right center;
+}
+@media (max-width: 700px) {
+  .scene-diagram { place-items: start center; padding: 90px 18px 0; }
+  .scene-diagram .arch-diagram { transform: none; }
+}
+.scene-shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgb(7 5 13 / 0.92) 0%, rgb(7 5 13 / 0.65) 36%, rgb(7 5 13 / 0.1) 66%, transparent 80%),
+    linear-gradient(0deg, rgb(7 5 13 / 0.85) 0%, transparent 45%);
+}
+.scene-copy {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  max-width: 640px;
+  padding: 0 var(--gutter) clamp(48px, 9vh, 110px);
+}
+.scene-copy h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(50px, 7.5vw, 116px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.88;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 rgb(7 5 13 / 0.6);
+}
+.scene-hook {
+  font-size: clamp(19px, 1.7vw, 24px);
+  font-weight: 700;
+  color: var(--accent);
+}
+.scene-plain {
+  max-width: 540px;
+  color: #efe6ff;
+  font-size: 17px;
+  line-height: 1.55;
+}
+.scene-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 178 56 / 0.55);
+  background: rgb(255 178 56 / 0.12);
+  color: var(--neon-orange);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.scene-copy .button {
+  margin-top: 6px;
+}
+.world[data-mode="recruiter"] .scene {
+  position: relative;
+  height: auto;
+  min-height: 70vh;
+}
+@media (max-width: 700px) {
+  .scene { min-height: 0; }
+  .scene-art img { object-position: 60% 30%; }
+  .scene-shade {
+    background: linear-gradient(0deg, rgb(7 5 13 / 0.96) 0%, rgb(7 5 13 / 0.8) 42%, transparent 72%);
+  }
+  .scene-plain { font-size: 15.5px; }
+}
+
+/* ---------- About: scattered photo collage (Lando Norris style) ---------- */
+.collage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: clamp(640px, 64vw, 880px);
+  margin: 80px 0 24px;
+}
+.collage-photo {
+  position: absolute;
+  left: var(--left);
+  top: var(--top);
+  width: var(--w);
+  margin: 0;
+  padding: 8px 8px 10px;
+  background: #f3ecf8;
+  color: #1a0a30;
+  rotate: var(--tilt);
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.5);
+  transition: rotate 300ms var(--ease-snap), scale 300ms var(--ease-snap);
+}
+.collage-photo:hover {
+  z-index: 3;
+  rotate: 0deg;
+  scale: 1.05;
+}
+.collage-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.collage-photo figcaption {
+  margin-top: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.collage-copy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  max-width: 440px;
+  text-align: center;
+}
+.collage-copy h2 {
+  font-size: clamp(34px, 4vw, 58px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.95;
+}
+.collage-copy p:not(.eyebrow) {
+  color: var(--muted);
+}
+.collage-signature {
+  margin-top: 4px;
+  font-size: clamp(52px, 6vw, 80px);
+  line-height: 1;
+  color: var(--neon-pink);
+  text-shadow: var(--glow-pink);
+  rotate: -6deg;
+}
+@media (max-width: 899px) {
+  .collage {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    min-height: 0;
+    margin-top: 56px;
+  }
+  .collage-photo {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+  }
+  .collage-copy {
+    grid-column: 1 / -1;
+    order: -1;
+    margin: 0 auto 10px;
+  }
+}
+
+/* ---------- Hackathons: trophy hall (Lando's helmet hall) ---------- */
+@media (min-width: 641px) {
+  .hack-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 22px;
+  }
+  .hack-row {
+    position: relative;
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 14px;
+    padding: 12px 12px 18px;
+    background: linear-gradient(180deg, #1a1036, #0d0820);
+    border-color: rgb(255 255 255 / 0.08);
+  }
+  .hack-thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border: 6px solid #f1e6f8;
+    border-radius: 4px;
+  }
+  .hack-thumb-empty {
+    border-color: rgb(255 255 255 / 0.08);
+  }
+  .hack-copy,
+  .hack-result {
+    padding-inline: 6px;
+  }
+  .hack-result {
+    justify-self: start;
+  }
+}
+/* The results that matter are lit like trophies under a spotlight. */
+.hack-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.hack-row {
+  isolation: isolate;
+}
+.hack-row.result-winner,
+.hack-row.result-merit {
+  border-color: rgb(255 210 94 / 0.6);
+  box-shadow: 0 0 34px rgb(255 210 94 / 0.16);
+}
+.hack-row.result-winner::before,
+.hack-row.result-merit::before {
+  background: radial-gradient(120% 60% at 50% 0%, rgb(255 210 94 / 0.22), transparent 70%);
+}
+.hack-row.result-national,
+.hack-row.result-asia {
+  border-color: rgb(24 240 255 / 0.45);
+}
+.hack-row.result-national::before,
+.hack-row.result-asia::before {
+  background: radial-gradient(120% 60% at 50% 0%, rgb(24 240 255 / 0.16), transparent 70%);
+}
+
+/* ---------- 3D tilt toward the cursor (TiltCards sets --rx/--ry) ---------- */
+@media (hover: hover) and (pointer: fine) {
+  .world[data-mode="game"] :is(.project-card, .ability-card, .hack-row) {
+    transform-style: preserve-3d;
+    transition:
+      transform 180ms ease-out,
+      border-color 220ms,
+      box-shadow 220ms;
+  }
+  .world[data-mode="game"] :is(.project-card, .ability-card, .hack-row):hover {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px);
+  }
+}
+
+/* ---------- What I build: poster-backed ability cards ---------- */
+.ability-grid {
+  gap: 20px;
+}
+.ability-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+}
+.ability-card .ability-art {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.32;
+  transition: opacity 400ms var(--ease-snap), scale 700ms var(--ease-snap);
+}
+.ability-card .ability-art img {
+  object-fit: cover;
+}
+.ability-card.has-art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgb(13 8 32 / 0.55) 0%, rgb(13 8 32 / 0.92) 55%, #0d0820 100%);
+}
+.ability-card:hover .ability-art {
+  opacity: 0.55;
+  scale: 1.06;
+}
+.ability-tags {
+  margin: 16px 0 2px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--neon-orange);
+}
+.ability-card h3 {
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 0.98;
+}
+.ability-card .ability-seen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px dashed var(--line-strong);
+  font-size: 12px;
+  color: var(--muted);
+}
+.ability-seen > span {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.seen-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgb(7 5 13 / 0.6);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 200ms, background-color 200ms, transform 200ms var(--ease-snap);
+}
+.seen-chip img {
+  width: 44px;
+  height: 28px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+.seen-chip:hover {
+  border-color: var(--neon-cyan);
+  background: rgb(24 240 255 / 0.12);
+  transform: translateY(-2px);
+}
+.seen-chip svg {
+  color: var(--neon-cyan);
+}
+
+/* ---------- Career road: pinned horizontal scroll ---------- */
+.career-road {
+  position: relative;
+  margin-top: clamp(80px, 10vw, 140px);
+}
+.road-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 26px;
+  padding: 0 0 40px;
+}
+.career-road.is-pinned .road-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  align-content: center;
+  overflow: hidden;
+  padding-top: var(--hud-h);
+}
+.road-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 8px 24px;
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.road-head .eyebrow {
+  flex-basis: 100%;
+}
+.road-head h2 {
+  font-size: clamp(48px, 8vw, 112px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.88;
+}
+.road-head h2 > span {
+  color: var(--neon-cyan);
+}
+.road-viewport {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+.road-viewport::-webkit-scrollbar {
+  display: none;
+}
+.career-road.is-pinned .road-viewport {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+.road-track {
+  position: relative;
+  display: flex;
+  gap: clamp(20px, 3vw, 44px);
+  width: max-content;
+  padding: 34px max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter))) 10px;
+  will-change: transform;
+}
+/* The road: a dashed lane line every stop sits on. */
+.road-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 16px;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--neon-orange) 0 28px, transparent 28px 46px);
+  opacity: 0.7;
+}
+.road-stop {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: clamp(300px, 34vw, 460px);
+  min-height: 400px;
+  padding: 30px 26px 22px;
+  border-radius: 20px;
+  border: 1px solid var(--line-strong);
+  background:
+    radial-gradient(120% 70% at 100% 0%, rgb(255 46 136 / 0.16), transparent 60%),
+    linear-gradient(180deg, #1a1036, #0d0820);
+  color: var(--text);
+  text-decoration: none;
+  scroll-snap-align: start;
+  transition: border-color 220ms, box-shadow 220ms, translate 300ms var(--ease-snap);
+}
+.road-stop:hover {
+  translate: 0 -6px;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 24px 50px rgb(0 0 0 / 0.5), var(--glow-cyan);
+}
+.road-stop.is-current {
+  border-color: rgb(24 240 255 / 0.6);
+  background:
+    radial-gradient(120% 70% at 100% 0%, rgb(24 240 255 / 0.2), transparent 60%),
+    linear-gradient(180deg, #14183a, #0d0820);
+}
+.road-pin {
+  position: absolute;
+  top: -30px;
+  left: 24px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--neon-pink);
+  color: #fff;
+  box-shadow: var(--glow-pink);
+}
+.road-stop.is-current .road-pin {
+  background: var(--neon-cyan);
+  color: #07050d;
+  box-shadow: var(--glow-cyan);
+}
+.road-chapter {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--neon-orange);
+}
+.road-date {
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  color: var(--muted);
+}
+.road-company {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(34px, 3.4vw, 48px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+.road-role {
+  color: var(--neon-cyan);
+  font-weight: 700;
+}
+.road-role em {
+  font-style: normal;
+  color: var(--muted);
+  font-weight: 500;
+}
+.road-plain {
+  color: #efe6ff;
+  line-height: 1.5;
+}
+.road-impact {
+  padding-left: 12px;
+  border-left: 3px solid var(--palm);
+  color: var(--muted);
+  font-size: 14px;
+}
+.road-foot {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line-strong);
+}
+.road-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.road-tags span {
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font-size: 12px;
+}
+.road-time {
+  display: grid;
+  justify-items: end;
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+  white-space: nowrap;
+}
+.road-time small {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-style: normal;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.road-next {
+  border-style: dashed;
+  background:
+    repeating-linear-gradient(135deg, rgb(255 255 255 / 0.025) 0 10px, transparent 10px 20px),
+    #0d0820;
+}
+.road-next .road-pin {
+  background: #4d4470;
+  box-shadow: none;
+}
+.road-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  font-family: var(--font-display), sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--neon-pink);
+}
+.road-progress {
+  display: none;
+  width: min(var(--max), calc(100% - 2 * var(--gutter)));
+  height: 3px;
+  margin: 0 auto;
+  background: var(--line);
+}
+.career-road.is-pinned .road-progress {
+  display: block;
+}
+.road-progress i {
+  display: block;
+  height: 100%;
+  width: calc(var(--road, 0) * 100%);
+  background: linear-gradient(90deg, var(--neon-pink), var(--neon-orange), var(--neon-cyan));
+}
+.world[data-mode="recruiter"] .road-line,
+.world[data-mode="recruiter"] .road-pin {
+  display: none;
+}
+/* Phones and tablets: the road turns 90° and runs down the page, so the
+   chapters stack and read with a normal vertical scroll. */
+@media (max-width: 899px) {
+  .road-viewport {
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+  .road-track {
+    flex-direction: column;
+    gap: 22px;
+    width: auto;
+    padding: 18px var(--gutter) 10px calc(var(--gutter) + 34px);
+  }
+  .road-line {
+    top: 0;
+    bottom: 0;
+    left: calc(var(--gutter) + 9px);
+    right: auto;
+    width: 4px;
+    height: auto;
+    background: repeating-linear-gradient(180deg, var(--neon-orange) 0 28px, transparent 28px 46px);
+  }
+  .road-stop {
+    width: 100%;
+    min-height: 0;
+    padding: 24px 20px 20px;
+  }
+  .road-stop:hover {
+    translate: none;
+  }
+  .road-pin {
+    top: 22px;
+    left: -42px;
+    width: 30px;
+    height: 30px;
+  }
+  .road-next {
+    min-height: 0;
+  }
+  .road-cta {
+    margin-top: 14px;
+  }
+}
+
+/* ---------- Map landmarks: Home (spawn) and the Dossier ---------- */
+.map-landmark {
+  text-decoration: none;
+  color: var(--text);
+}
+.map-landmark small {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  translate: -50% 0;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgb(7 5 13 / 0.85);
+  font-family: var(--font-display), sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--neon-cyan);
+}
+.map-dossier {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  transform: translate(-50%, -50%) scale(var(--counter-scale, 1));
+}
+.map-dossier small {
+  position: static;
+  translate: none;
+  margin-top: 4px;
+  color: var(--neon-orange);
+}
+.map-dossier .marker-pin {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(140deg, var(--neon-orange), #b8641a);
+  box-shadow: var(--glow-orange);
+}
+.map-landmark:hover small,
+.map-landmark:focus-visible small {
+  background: var(--neon-cyan);
+  color: #07050d;
+}

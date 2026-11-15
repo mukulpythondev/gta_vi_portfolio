@@ -1,0 +1,486 @@
+/* Painted world art (public/art, wired through lib/art.ts). Each block only
+   applies when the art exists; otherwise the code-drawn scenes are untouched. */
+
+/* ---------- Home hero ---------- */
+.hero-art {
+  overflow: hidden;
+  background: var(--bg);
+}
+.hero-art picture {
+  display: block;
+}
+/* The art starts at the top edge (no parallax bleed upward), anchored to the
+   top so the character's head always clears the fixed navbar. */
+.hero-art .layer-art {
+  top: 0;
+  height: 100%;
+}
+.hero-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The art is a 16:10 crop from the right of the painting. Wide screens
+     show its full width (the woman lands near the middle); narrower screens
+     trim from the left so Mukul is never cut. 30% keeps heads below the HUD. */
+  object-position: 100% 30%;
+}
+.hero.has-art .hero-shade {
+  /* Dark on the left for the copy; only the last strip fades to the page, so
+     the boat and wake stay in the scene. */
+  background:
+    linear-gradient(90deg, rgb(7 5 13 / 0.88) 0%, rgb(7 5 13 / 0.62) 34%, rgb(7 5 13 / 0.12) 56%, transparent 68%),
+    linear-gradient(180deg, rgb(7 5 13 / 0.45), transparent 18%, transparent 88%, var(--bg) 100%);
+}
+/* ---------- Crossing ticker tapes ----------
+   Two equal tapes forming a symmetric X centred on the screen, scrolling in
+   opposite directions. Same type on both; only the colours differ. */
+.ticker-x {
+  --xt-tilt: 4.5deg;
+  position: relative;
+  z-index: 2;
+  height: clamp(150px, 15vw, 300px);
+  margin-top: clamp(28px, 4vw, 56px);
+}
+.xt {
+  position: absolute;
+  top: 50%;
+  left: -6vw;
+  right: -6vw;
+  overflow: hidden;
+  padding: clamp(10px, 1vw, 14px) 0;
+  transform-origin: 50% 50%;
+  translate: 0 -50%;
+  box-shadow: 0 16px 36px rgb(0 0 0 / 0.45);
+}
+.xt-a {
+  z-index: 2;
+  rotate: calc(var(--xt-tilt) * -1);
+  background:
+    linear-gradient(90deg, rgb(255 46 136 / 0.18), rgb(24 240 255 / 0.12)),
+    #0d0820;
+  border-block: 2px solid var(--neon-pink);
+}
+.xt-b {
+  z-index: 1;
+  rotate: var(--xt-tilt);
+  background: linear-gradient(100deg, var(--neon-pink), #ff5ca8 45%, var(--neon-orange));
+  border-block: 2px solid #14041f;
+}
+.xt-track {
+  display: flex;
+  width: max-content;
+  animation: xt-left 60s linear infinite;
+}
+.xt-b .xt-track {
+  animation-name: xt-right;
+}
+.ticker-x:hover .xt-track {
+  animation-play-state: paused;
+}
+.xt-run {
+  display: flex;
+}
+.xt-item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(10px, 1.1vw, 16px);
+  padding-right: clamp(10px, 1.1vw, 16px);
+  white-space: nowrap;
+}
+.xt-item :is(b, em) {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(18px, 2vw, 28px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.xt-item i {
+  font-style: normal;
+  font-size: clamp(12px, 1.1vw, 16px);
+}
+/* Dark tape: white event, coloured result in the same type. */
+.xt-a .xt-item b {
+  color: #fff;
+}
+.xt-a .xt-result {
+  color: var(--neon-cyan);
+}
+.xt-a .xt-result.result-winner,
+.xt-a .xt-result.result-merit {
+  color: #ffd25e;
+}
+.xt-a .xt-result.result-judge {
+  color: var(--neon-pink);
+}
+.xt-a .xt-item i {
+  color: var(--neon-orange);
+}
+/* Sunset tape: dark ink on the gradient. */
+.xt-b .xt-item b,
+.xt-b .xt-item i {
+  color: #14041f;
+}
+@keyframes xt-left {
+  to { transform: translateX(-50%); }
+}
+@keyframes xt-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+@media (max-width: 700px) {
+  /* Steeper and taller on phones so the two tapes separate clearly instead
+     of one hiding the other across the narrow screen. */
+  .ticker-x { --xt-tilt: 12deg; height: 190px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xt-track { animation: none; }
+}
+.hero.has-art .hero-grain {
+  opacity: 0.07;
+}
+
+.hero h1 {
+  text-transform: uppercase;
+}
+
+/* ---------- Hero layout: the art is the character, the copy sits on the left ---------- */
+.world[data-mode="game"] .hero.has-art .hero-grid {
+  grid-template-columns: minmax(0, 640px);
+  margin: 0;
+  max-width: none;
+}
+/* Phones: the square crop sits across the top like a loading-screen card and
+   the headline rises out of its faded bottom edge, so both faces stay clear. */
+@media (max-width: 700px) {
+  .hero.has-art {
+    --art-h: min(100vw, 62svh);
+    min-height: auto;
+    padding-top: calc(var(--art-h) - 64px);
+    padding-bottom: 20px;
+  }
+  .hero.has-art .hero-art {
+    bottom: auto;
+    height: var(--art-h);
+  }
+  .hero-art img {
+    object-position: center top;
+  }
+  .hero.has-art .hero-shade {
+    background: linear-gradient(
+      180deg,
+      rgb(7 5 13 / 0.45) 0,
+      transparent 70px,
+      transparent calc(var(--art-h) * 0.55),
+      rgb(7 5 13 / 0.82) calc(var(--art-h) - 50px),
+      var(--bg) var(--art-h)
+    );
+  }
+  .hero.has-art .hero-welcome {
+    font-size: 26px;
+  }
+  .hero.has-art h1 {
+    font-size: clamp(54px, 17vw, 76px);
+  }
+  .hero.has-art .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .hero.has-art .hero-actions .button {
+    padding-inline: 14px;
+    font-size: 15px;
+  }
+  .hero.has-art .hero-bottom {
+    margin-top: 22px;
+  }
+  .hero.has-art .hero-radio {
+    display: none;
+  }
+}
+
+/* ---------- Page banners ---------- */
+.page-heading .heading-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.95;
+  -webkit-mask-image: linear-gradient(90deg, transparent 18%, #000 62%);
+  mask-image: linear-gradient(90deg, transparent 18%, #000 62%);
+}
+.page-heading .heading-art img {
+  object-fit: cover;
+  object-position: right center;
+}
+/* Phones: the banner art becomes a picture strip above the title instead of a
+   faint wash behind it. */
+@media (max-width: 700px) {
+  .page-heading.has-art {
+    padding-top: 128px;
+  }
+  .page-heading .heading-art {
+    opacity: 0.95;
+    -webkit-mask-image: linear-gradient(180deg, #000 0, #000 90px, transparent 175px);
+    mask-image: linear-gradient(180deg, #000 0, #000 90px, transparent 175px);
+  }
+  .page-heading .heading-art img {
+    object-position: 75% 35%;
+  }
+  .page-heading.has-art .back-link {
+    position: absolute;
+    top: 16px;
+    left: 18px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    color: #fff;
+    background: rgb(7 5 13 / 0.6);
+    backdrop-filter: blur(6px);
+  }
+}
+
+/* ---------- Hackathons on phones: the photo becomes a banner on top ---------- */
+@media (max-width: 640px) {
+  .hack-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 10px 10px 16px;
+  }
+  .hack-thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  .hack-thumb-empty {
+    aspect-ratio: auto;
+    height: 52px;
+  }
+  .hack-copy,
+  .hack-result {
+    padding-inline: 6px;
+  }
+  .hack-result {
+    grid-column: 1;
+  }
+}
+
+/* ---------- About: painted dossier in game mode, real photo for recruiters ---------- */
+:root[data-mode="game"] .character-portrait .portrait-photo,
+:root[data-mode="recruiter"] .character-portrait .portrait-art {
+  display: none;
+}
+.character-portrait .portrait-art {
+  object-position: center 25%;
+}
+
+/* ---------- Contact phone wallpaper ---------- */
+.phone.has-wallpaper {
+  background:
+    linear-gradient(180deg, rgb(11 6 24 / 0.05), rgb(11 6 24 / 0.35) 40%, rgb(11 6 24 / 0.82) 72%),
+    var(--wallpaper) center 20% / cover;
+}
+
+/* ---------- About: story mode (was /timeline) ---------- */
+.about-story {
+  margin-top: 56px;
+  scroll-margin-top: calc(var(--hud-h) + 24px);
+}
+.about-story > h2 {
+  margin: 8px 0 22px;
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.95;
+}
+
+/* ---------- Navbar logo: "MR" lettered like the GTA VI logo ---------- */
+.brand-monogram.brand-logo {
+  position: relative;
+  width: auto;
+  height: 46px;
+  padding: 0 14px 0 2px;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+.brand-logo b {
+  font-family: var(--font-display), sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(180deg, #ffd27a 0%, #ff9a3c 22%, #ff2e88 52%, #9d4dff 76%, #18f0ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(2px 2px 0 #07050d) drop-shadow(0 0 10px rgb(255 46 136 / 0.45));
+}
+.brand-logo small {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 1px 1px 0 #07050d;
+}
+.brand:hover .brand-logo b {
+  filter: drop-shadow(2px 2px 0 #07050d) drop-shadow(0 0 16px rgb(255 46 136 / 0.8));
+}
+@media (max-width: 700px) {
+  .brand-monogram.brand-logo { width: auto; height: 40px; }
+  .brand-logo b { font-size: 34px; }
+}
+
+/* ---------- Button hovers ----------
+   Rounded pills: a light sweep across the button, a lift, a nudge on the
+   icon and a neon glow around it. */
+.world[data-mode="game"] :is(.button-primary, .button-glass) {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform 220ms var(--ease-snap),
+    filter 220ms,
+    color 220ms,
+    background-color 220ms,
+    box-shadow 220ms;
+}
+.world[data-mode="game"] :is(.button-primary, .button-glass)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 25%, rgb(255 255 255 / 0.5) 50%, transparent 75%);
+  transform: translateX(-130%);
+  transition: transform 650ms var(--ease-snap);
+}
+.world[data-mode="game"] :is(.button-primary, .button-glass):is(:hover, :focus-visible)::after {
+  transform: translateX(130%);
+}
+.world[data-mode="game"] :is(.button-primary, .button-glass) svg {
+  transition: transform 220ms var(--ease-snap);
+}
+.world[data-mode="game"] :is(.button-primary, .button-glass):is(:hover, :focus-visible) svg {
+  transform: translate(3px, -3px);
+}
+.world[data-mode="game"] .button-primary:is(:hover, :focus-visible) {
+  transform: translateY(-3px);
+  filter: brightness(1.12) saturate(1.2);
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.25), 0 0 14px rgb(255 46 136 / 0.8), 0 0 40px rgb(255 178 56 / 0.45);
+  animation: none;
+}
+.world[data-mode="game"] .button-glass:is(:hover, :focus-visible) {
+  transform: translateY(-3px);
+  color: #07050d;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.35), transparent 50%),
+    linear-gradient(100deg, var(--neon-cyan), #7cf7ff);
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.2), var(--glow-cyan);
+}
+.world[data-mode="game"] :is(.button-primary, .button-glass):active {
+  transform: translateY(0) scale(0.98);
+}
+.world[data-mode="recruiter"] .button:hover {
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .world :is(.button-primary, .button-glass)::after { display: none; }
+}
+
+/* ---------- Featured operation card ---------- */
+.spotlight-card {
+  transition: transform 320ms var(--ease-snap), border-color 320ms, box-shadow 320ms;
+}
+.spotlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 1px rgb(24 240 255 / 0.35), 0 30px 70px rgb(0 0 0 / 0.5), 0 0 40px rgb(24 240 255 / 0.12);
+}
+.spotlight-shot {
+  transition: border-color 320ms, box-shadow 320ms;
+}
+.spotlight-shot img {
+  transition: transform 700ms var(--ease-snap), filter 700ms;
+}
+.spotlight-shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.18) 50%, transparent 65%);
+  transform: translateX(-100%);
+  transition: transform 900ms var(--ease-snap);
+}
+.spotlight-card:hover .spotlight-shot {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 26px rgb(24 240 255 / 0.3);
+}
+.spotlight-card:hover .spotlight-shot img {
+  transform: scale(1.06);
+  filter: saturate(1.2) brightness(1.08);
+}
+.spotlight-card:hover .spotlight-shot::after {
+  transform: translateX(100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-card,
+  .spotlight-card:hover,
+  .spotlight-card:hover .spotlight-shot img { transform: none; }
+}
+
+/* ---------- Photo mode lightbox: fixed stage so the modal never jumps ---------- */
+.lightbox-stage {
+  position: relative;
+  width: 100%;
+  height: min(calc(100dvh - 240px), 70vh);
+  min-height: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgb(0 0 0 / 0.35);
+}
+.lightbox .lightbox-stage .lightbox-image {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  object-fit: contain;
+  border-radius: 0;
+}
+/* Fixed caption block: role badge + up to two title lines + place, so the
+   modal keeps one height whatever the caption says. */
+.lightbox-controls {
+  align-items: center;
+}
+.lightbox-meta {
+  height: 104px;
+  align-content: center;
+  overflow: hidden;
+}
+.lightbox-meta strong {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.1;
+}
+@media (max-width: 700px) {
+  .lightbox-meta { height: 112px; }
+  .lightbox-meta strong { font-size: 19px; }
+}
+
+/* ---------- Footer credit ---------- */
+.footer-credit {
+  grid-column: 1 / -1;
+  max-width: 760px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--dim);
+}

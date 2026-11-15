@@ -1,0 +1,112 @@
+/* ---------- Motion polish: slanted ticker, contact phone ---------- */
+/* Scroll reveal runs in components/hud/scroll-reveal.tsx (Web Animations API). */
+
+/* Featured operation hover */
+.spotlight-card {
+  transition: border-color var(--t-panel), box-shadow var(--t-panel);
+}
+.spotlight-card:hover {
+  border-color: rgb(24 240 255 / 0.65);
+  box-shadow: 0 0 0 1px rgb(24 240 255 / 0.25), 0 26px 60px rgb(0 0 0 / 0.45);
+}
+.spotlight-photo {
+  transition: transform 420ms var(--ease-snap), box-shadow 420ms;
+}
+.spotlight-card:hover .spotlight-photo {
+  transform: rotate(0deg) translateY(-6px) scale(1.02);
+  box-shadow: 0 30px 54px rgb(0 0 0 / 0.55), 0 0 28px rgb(255 46 136 / 0.25);
+}
+.spotlight-copy h2 {
+  transition: color var(--t-panel), text-shadow var(--t-panel);
+}
+.spotlight-card:hover .spotlight-copy h2 {
+  text-shadow: 3px 3px 0 rgb(255 46 136 / 0.55);
+}
+.spotlight-copy .tags span {
+  transition: transform 200ms var(--ease-snap), border-color 200ms, color 200ms;
+}
+.spotlight-copy .tags span:hover {
+  transform: translateY(-2px);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+/* `.home` clips sideways so the wider, tilted ticker tapes never add a
+   horizontal scrollbar (tapes themselves live in art.css). */
+.home {
+  overflow-x: clip;
+}
+
+/* Contact phone: every app row, the avatar and the message respond. */
+.phone {
+  transition: rotate 450ms var(--ease-snap), translate 450ms var(--ease-snap), box-shadow 450ms;
+}
+.phone:hover {
+  rotate: 0deg;
+  translate: 0 -6px;
+  box-shadow: 0 46px 90px rgb(0 0 0 / 0.6), 0 0 56px rgb(255 46 136 / 0.35);
+}
+.phone-avatar {
+  transition: transform 300ms var(--ease-snap), box-shadow 300ms;
+}
+.phone-avatar:hover {
+  transform: scale(1.08) rotate(-6deg);
+  box-shadow: var(--glow-pink), 0 0 0 4px rgb(255 46 136 / 0.25);
+}
+.phone-message {
+  transition: transform 260ms var(--ease-snap), background-color 260ms;
+}
+.phone-message:hover {
+  transform: translateY(-2px);
+  background-color: rgb(255 255 255 / 0.13);
+}
+.phone-app {
+  border: 1px solid transparent;
+  transition: transform 220ms var(--ease-snap), background-color 220ms, border-color 220ms, box-shadow 220ms;
+}
+.phone-app .app-icon {
+  transition: transform 260ms var(--ease-snap), box-shadow 260ms;
+}
+.phone-app > svg:last-child {
+  transition: transform 220ms var(--ease-snap), color 220ms;
+}
+a.phone-app:is(:hover, :focus-visible) {
+  transform: translateX(5px);
+  background-color: rgb(255 255 255 / 0.11);
+  border-color: rgb(24 240 255 / 0.45);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.3), inset 3px 0 0 var(--neon-cyan);
+}
+a.phone-app:is(:hover, :focus-visible) .app-icon {
+  transform: scale(1.12) rotate(-8deg);
+  box-shadow: 0 0 18px rgb(24 240 255 / 0.55);
+}
+a.phone-app:is(:hover, :focus-visible) > svg:last-child {
+  transform: translate(3px, -3px);
+  color: var(--neon-cyan);
+}
+a.phone-app:active {
+  transform: translateX(5px) scale(0.98);
+}
+.phone-app.unavailable:hover {
+  border-color: rgb(255 255 255 / 0.12);
+}
+
+/* Contact status tiles and the safety note */
+.contact-status div,
+.contact-note {
+  transition: transform 220ms var(--ease-snap), border-color 220ms, box-shadow 220ms;
+}
+.contact-status div:hover {
+  transform: translateY(-3px);
+  border-color: rgb(24 240 255 / 0.45);
+  box-shadow: 0 10px 22px rgb(0 0 0 / 0.3);
+}
+.contact-note:hover {
+  border-color: rgb(15 217 155 / 0.7);
+}
+.contact-missions a:hover svg:first-child {
+  transform: scale(1.1) rotate(-6deg);
+}
+.contact-missions svg:first-child {
+  transition: transform 220ms var(--ease-snap);
+}

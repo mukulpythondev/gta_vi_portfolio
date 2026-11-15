@@ -1,0 +1,211 @@
+/* UX pass (2026-11-09): less repetition, shorter cards, no overlaps. */
+
+/* Project card: hook, one proof point, three tags. */
+.project-art {
+  aspect-ratio: 16 / 8;
+}
+.project-info {
+  gap: 10px;
+}
+.project-info h3 {
+  font-size: 26px;
+}
+.project-info .project-hook {
+  color: var(--text, #f3eefe);
+  font-size: 16px;
+  line-height: 1.45;
+}
+.project-info .project-metric,
+.project-metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  color: var(--accent);
+  font-family: var(--font-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+}
+.project-info .tags {
+  margin-top: 4px;
+}
+
+/* Home */
+.player-stats > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+.home-project-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Detail pages: one column, links in the heading, nothing said twice. */
+.detail-stack {
+  display: grid;
+  gap: 18px;
+  max-width: 920px;
+}
+.detail-actions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.detail-actions .project-metric {
+  --accent: var(--neon-cyan);
+}
+.detail-stack .detail-section h2 {
+  margin-top: 0;
+}
+.detail-built-for {
+  margin-top: 14px;
+}
+
+/* Armory: most-used as cards, the rest as grouped chips. */
+.armory-more {
+  display: grid;
+  gap: 14px;
+  margin-top: 28px;
+  padding: 22px 24px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+.armory-more-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.armory-more-class {
+  display: grid;
+  text-align: left;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.armory-more-class small {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+.armory-more-class:hover { color: var(--neon-cyan); }
+.armory-more .tags { list-style: none; margin: 0; padding: 0; }
+.armory-more .tags b { color: var(--neon-cyan); font-weight: 600; }
+@media (max-width: 700px) {
+  .armory-more-row { grid-template-columns: 1fr; gap: 6px; }
+}
+
+/* Achievements: title is the biggest text in the card. */
+.achievement-grid article h2 {
+  font-size: 21px;
+  line-height: 1.2;
+  margin: 4px 0 6px;
+}
+.achievement-grid article p:not(.eyebrow) {
+  font-size: 14.5px;
+  color: var(--muted);
+}
+.cert-card .eyebrow::before {
+  display: none !important;
+}
+.page-achievements .trophy-case {
+  margin-top: 40px;
+}
+
+/* Objective tracker: compact by default, details on hover, folds on scroll. */
+.objective {
+  top: calc(var(--hud-h) + 8px);
+  width: 240px;
+  padding: 9px 12px;
+  transition: width 200ms, padding 200ms, opacity 200ms;
+}
+.objective-link { font-size: 16px; }
+.objective :is(.objective-sub, .objective-count, .objective-meter) {
+  display: none;
+}
+.objective:is(:hover, :focus-within) :is(.objective-sub, .objective-count) { display: block; }
+.objective:is(:hover, :focus-within) .objective-meter { display: block; }
+.objective.is-folded:not(:hover, :focus-within) {
+  width: 132px;
+  opacity: 0.85;
+}
+.objective.is-folded:not(:hover, :focus-within) .objective-link {
+  display: none;
+}
+
+/* Toasts: smaller, bottom-left, never over the reading column. */
+.toasts {
+  width: min(340px, calc(100vw - 24px));
+}
+
+/* Inner pages: a shorter street scene, the full one stays on home. */
+.footer.footer-short {
+  --scene-h: clamp(180px, 18vw, 270px);
+}
+
+/* Resume: a one-screen summary instead of link cards. */
+.resume-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 26px;
+}
+.resume-summary h3 {
+  margin: 0 0 10px;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--neon-orange);
+}
+.resume-summary h3 + p { margin-bottom: 18px; }
+.resume-summary ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.resume-summary a {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgb(255 255 255 / 0.03);
+  transition: border-color 200ms, background 200ms;
+}
+.resume-summary a:hover { border-color: var(--neon-cyan); background: rgb(24 240 255 / 0.06); }
+.resume-summary strong { font-size: 16px; }
+.resume-summary span { font-size: 14px; color: var(--text); }
+.resume-summary small { font-size: 12.5px; color: var(--muted); }
+@media (max-width: 900px) {
+  .resume-summary { grid-template-columns: 1fr; }
+}
+
+.gallery-more {
+  display: flex;
+  margin: 28px auto 0;
+}
+
+/* Hackathons: the result is the headline fact. */
+.hack-summary {
+  margin: 0 0 16px;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--neon-orange);
+  text-transform: uppercase;
+}
+.hack-result {
+  font-size: 13px !important;
+  padding: 6px 14px !important;
+}
+.career-stats {
+  grid-template-columns: repeat(2, minmax(0, 220px)) !important;
+}
+.project-metric { white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
