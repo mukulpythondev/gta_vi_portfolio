@@ -10,7 +10,7 @@ const SELECTOR = [
   ".about-story > h2",
   ".home .spotlight-card",
   ".home .home-project-grid > *",
-  ".home .save-slot",
+  ".mission-file",
   ".home .reel-track > li",
   ".contact-layout > div > *:not(.contact-status, .contact-missions)",
   ".contact-status > div",

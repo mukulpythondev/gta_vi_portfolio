@@ -9,6 +9,31 @@
 .hero-art picture {
   display: block;
 }
+.hero-art .layer-art > picture,
+.hero-art .depth-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+/* The WebGL depth layer fades in over the plain image once it has drawn. */
+.depth-canvas {
+  opacity: 0;
+  transition: opacity 500ms ease;
+  pointer-events: none;
+}
+.depth-canvas.is-live {
+  opacity: 1;
+}
+/* Shared WebGL hover layer placed right after a hovered poster image. */
+.poster-fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
 /* The art starts at the top edge (no parallax bleed upward), anchored to the
    top so the character's head always clears the fixed navbar. */
 .hero-art .layer-art {

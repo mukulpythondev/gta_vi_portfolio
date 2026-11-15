@@ -7,6 +7,7 @@ import {
   FolderLock,
   ShieldCheck,
   Mic,
+  Plus,
   Trophy,
   Wrench,
 } from "lucide-react";
@@ -16,7 +17,7 @@ import { experience, experiencePlaceholder } from "@/content/experience";
 import { hackathons, hackathonPlaceholder } from "@/content/hackathons";
 import { achievements, achievementPlaceholder } from "@/content/achievements";
 import { gallery, galleryPlaceholder } from "@/content/gallery";
-import { certifications, certificationsRepo } from "@/content/certifications";
+import { certifications, certificationsRepo, proCertifications } from "@/content/certifications";
 import { timeline } from "@/content/timeline";
 import { safeHref, socials } from "@/content/socials";
 import { sectionInfo } from "@/content/sections";
@@ -31,7 +32,9 @@ import { Inventory } from "./inventory";
 import { Gallery } from "./gallery";
 import { StoryMode } from "./flight-log";
 import { AboutCollage } from "./about-collage";
-import { SaveSlots, playtime } from "./save-slots";
+import { TrophyShelf } from "./trophy-shelf";
+import { TrophyWall } from "./trophy-wall";
+import { MissionFiles } from "./mission-files";
 
 export { sectionInfo };
 
@@ -135,19 +138,7 @@ export function PortfolioSection({ section }: { section: string }) {
         )}
         {section === "experience" &&
           (experience.length ? (
-            <div className="career">
-              <dl className="career-stats">
-                <div>
-                  <dt>Total playtime</dt>
-                  <dd>{playtime(`${experience[experience.length - 1].duration.split(" – ")[0]} – Present`)}</dd>
-                </div>
-                <div>
-                  <dt>Chapters</dt>
-                  <dd>{String(experience.length).padStart(2, "0")}</dd>
-                </div>
-              </dl>
-              <SaveSlots detailed />
-            </div>
+            <MissionFiles />
           ) : (
             <PendingContent
               title="The record is being assembled."
@@ -159,8 +150,23 @@ export function PortfolioSection({ section }: { section: string }) {
         {section === "hackathons" &&
           (hackathons.length ? (
             <>
+            <TrophyShelf />
+            <div className="hack-record">
+              <p className="hack-record-big">
+                <strong>{profile.hackathonFinals}</strong>
+                <span>
+                  hackathon finals,
+                  <br />
+                  online and on-site
+                </span>
+              </p>
+              <p className="hack-record-note">
+                The {hackathons.length} with photos and a story are listed below. The rest were online rounds and
+                regional finals.
+              </p>
+            </div>
             <p className="hack-summary">
-              {hackathons.length} events ·{" "}
+              {hackathons.length} listed here ·{" "}
               {hackathons.filter((item) => /winner/i.test(item.result)).length} win ·{" "}
               {hackathons.filter((item) => /prize/i.test(item.result)).length} merit prize ·{" "}
               {hackathons.filter((item) => /finalist/i.test(item.result)).length} finals ·{" "}
@@ -170,7 +176,7 @@ export function PortfolioSection({ section }: { section: string }) {
               {hackathons.map((item) => {
                 const project = projects.find((entry) => entry.slug === item.projectSlug);
                 return (
-                  <li key={item.slug} className={`hack-row result-${item.result.toLowerCase().split(" ")[0]}`}>
+                  <li key={item.slug} id={`hack-${item.slug}`} className={`hack-row result-${item.result.toLowerCase().split(" ")[0]}`}>
                     {item.photo ? (
                       <Image
                         className="hack-thumb"
@@ -211,21 +217,7 @@ export function PortfolioSection({ section }: { section: string }) {
           ))}
         {section === "achievements" &&
           (achievements.length ? (
-            <div className="achievement-grid">
-              {achievements.map((item) => (
-                <article key={item.title}>
-                  <Trophy size={35} />
-                  <p className="eyebrow">{item.date}</p>
-                  <h2>{item.title}</h2>
-                  <p>{item.description}</p>
-                  {safeHref(item.evidence) && (
-                    <a className="text-link" href={safeHref(item.evidence)!} target="_blank" rel="noreferrer">
-                      View evidence <ArrowUpRight size={16} />
-                    </a>
-                  )}
-                </article>
-              ))}
-            </div>
+            <TrophyWall />
           ) : (
             <PendingContent
               title="Career milestones. Verified first."
@@ -236,31 +228,68 @@ export function PortfolioSection({ section }: { section: string }) {
           <section className="cert-shelf" aria-labelledby="certs-title">
             <div className="cert-head">
               <div>
-                <p className="eyebrow">LICENCES · {certifications.length} COURSE CERTIFICATES</p>
-                <h2 id="certs-title">Certifications</h2>
-                <p className="muted">
-                  Meta and Google courses on Coursera, from JavaScript and React to back-end basics and version
-                  control. Each one links to its verification page.
+                <p className="eyebrow">
+                  LICENCES · {proCertifications.length} PROFESSIONAL · {certifications.length} COURSES
                 </p>
+                <h2 id="certs-title">Certifications</h2>
               </div>
               <a className="text-link" href={certificationsRepo} target="_blank" rel="noreferrer">
                 All certificates on GitHub <ArrowUpRight size={16} />
               </a>
             </div>
-            <ul className="cert-grid">
-              {certifications.map((item) => (
-                <li key={item.verify} className={`cert-card issuer-${item.issuer.toLowerCase()}`}>
-                  <span className="cert-issuer">
-                    <ShieldCheck size={16} /> {item.issuer}
+            {proCertifications.map((item) => (
+              <article key={item.verify} className="cert-feature">
+                <Image className="cert-badge" src={item.badge} alt={`${item.issuer} ${item.title} badge`} width={299} height={320} />
+                <div className="cert-feature-body">
+                  <span className="cert-verified">
+                    <ShieldCheck size={15} /> Verified by {item.issuer}
                   </span>
                   <h3>{item.title}</h3>
-                  <p className="eyebrow">{item.date} · Coursera</p>
-                  <a className="text-link" href={item.verify} target="_blank" rel="noreferrer">
-                    Verify <span className="sr-only">{item.title} certificate</span> <ArrowUpRight size={15} />
+                  <p className="cert-level">{item.level}</p>
+                  <dl className="cert-dates">
+                    <div>
+                      <dt>Issued</dt>
+                      <dd>{item.issued}</dd>
+                    </div>
+                    <div>
+                      <dt>Valid until</dt>
+                      <dd>{item.validUntil}</dd>
+                    </div>
+                  </dl>
+                  <ul className="cert-covers" aria-label="What it covers">
+                    {item.covers.map((topic) => (
+                      <li key={topic}>{topic}</li>
+                    ))}
+                  </ul>
+                  <a className="button button-primary cert-verify" href={item.verify} target="_blank" rel="noreferrer">
+                    Verify on Oracle <ArrowUpRight size={16} />
                   </a>
-                </li>
-              ))}
-            </ul>
+                </div>
+              </article>
+            ))}
+            <details className="cert-courses">
+              <summary>
+                <span>
+                  <strong>{certifications.length} course certificates</strong>
+                  <small>Meta and Google on Coursera · 2023 · each links to its verification page</small>
+                </span>
+                <Plus size={18} aria-hidden="true" />
+              </summary>
+              <ul className="cert-grid">
+                {certifications.map((item) => (
+                  <li key={item.verify} className={`cert-card issuer-${item.issuer.toLowerCase()}`}>
+                    <span className="cert-issuer">
+                      <ShieldCheck size={16} /> {item.issuer}
+                    </span>
+                    <h3>{item.title}</h3>
+                    <p className="eyebrow">{item.date} · Coursera</p>
+                    <a className="text-link" href={item.verify} target="_blank" rel="noreferrer">
+                      Verify <span className="sr-only">{item.title} certificate</span> <ArrowUpRight size={15} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
           </section>
         )}
         {section === "achievements" && <TrophyCase />}

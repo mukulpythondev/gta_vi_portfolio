@@ -37,9 +37,9 @@ const jobs = [
     out: [
       // 16:10 crop from the right: trimming open sea on the left pulls the
       // woman toward the centre, and the painting still fills the screen.
-      { file: "art/hero/key.webp", w: 2400, h: 1500, kb: 380, focusX: 1 },
+      { file: "art/hero/key.webp", w: 2400, h: 1500, kb: 380, focusX: 1, depth: true },
       // Square crop from the right of the frame so both characters fit on phones.
-      { file: "art/hero/key-mobile.webp", w: 1080, h: 1080, kb: 200, focusX: 1, focusY: 0 },
+      { file: "art/hero/key-mobile.webp", w: 1080, h: 1080, kb: 200, focusX: 1, focusY: 0, depth: true },
       { file: "art/og/default.jpg", w: 1200, h: 630, kb: 150 },
     ],
   },
@@ -106,6 +106,27 @@ async function cleanMark(source, W, H, { cx, cy, size, dx }) {
   return sharp(data, { raw: { width: W, height: H, channels: 3 } }).png().toBuffer();
 }
 
+let estimator = null;
+/**
+ * Greyscale depth map (white = near) for the WebGL depth effect, made locally
+ * with Depth Anything V2 (small). Softened so the shader displaces smoothly
+ * instead of tearing at edges, and kept small: the shader only needs gradients.
+ */
+async function depthMap(rgb, width, height) {
+  if (!estimator) {
+    const { pipeline } = await import("@huggingface/transformers");
+    estimator = await pipeline("depth-estimation", "onnx-community/depth-anything-v2-small");
+  }
+  const { RawImage } = await import("@huggingface/transformers");
+  const { depth } = await estimator(new RawImage(new Uint8ClampedArray(rgb), width, height, 3));
+  const w = Math.min(1024, width);
+  return sharp(Buffer.from(depth.data), { raw: { width: depth.width, height: depth.height, channels: 1 } })
+    .resize(w, Math.round((w * height) / width))
+    .blur(2.5)
+    .webp({ quality: 80 })
+    .toBuffer();
+}
+
 async function encode(pipeline, file, kb) {
   const jpg = file.endsWith(".jpg");
   for (const quality of [82, 76, 70, 64, 58, 52]) {
@@ -150,6 +171,13 @@ for (const job of jobs) {
     const over = size > target.kb ? "  OVER BUDGET" : "";
     console.log(`${job.raw.padEnd(36)} -> ${target.file.padEnd(38)} ${size} KB q${quality}${upscale}${over}`);
     done++;
+    if (target.depth) {
+      const depthFile = target.file.replace(/\.webp$/, "-depth.webp");
+      const depthBuffer = await depthMap(await pipeline.clone().removeAlpha().raw().toBuffer(), target.w, target.h);
+      fs.writeFileSync(path.join(PUBLIC, depthFile), depthBuffer);
+      console.log(`${"".padEnd(36)} -> ${depthFile.padEnd(38)} ${Math.round(depthBuffer.length / 1024)} KB (depth)`);
+      done++;
+    }
   }
 }
 console.log(`\n${done} file(s) written.`);

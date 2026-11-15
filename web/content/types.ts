@@ -50,6 +50,16 @@ export type Achievement = {
   description: string;
   date: string;
   evidence: string | null;
+  /** Medal rank: gold = top results, crew = roles held at events. */
+  tier?: "gold" | "silver" | "bronze" | "crew";
+  icon?: "medal" | "globe" | "gavel" | "landmark" | "megaphone" | "flame" | "code";
+  /** Gallery photo filename (without .jpg) shown on the card. */
+  photo?: string;
+  /** A headline number, shown huge instead of a photo. */
+  stat?: string;
+  where?: string;
+  /** Wide card on desktop. */
+  featured?: boolean;
 };
 export type GalleryItem = {
   src: string;

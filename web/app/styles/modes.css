@@ -108,7 +108,8 @@
   .pause-side h2 { font-size: 40px; }
   .pause-main { max-height: none; }
   .station-dial { grid-template-columns: repeat(2, 1fr); }
-  .toasts { top: auto; bottom: 86px; right: auto; left: 50%; transform: translateX(-50%); }
+  /* Phones: just under the top bar, clear of the hero buttons and bottom nav. */
+  .toasts { top: calc(var(--hud-h, 72px) + 6px); bottom: auto; right: auto; left: 50%; transform: translateX(-50%); }
   .marker-pin { width: 30px; height: 30px; }
   .marker-pin svg { width: 13px; height: 13px; }
   .map-marker small { font-size: 9.5px; padding: 1px 5px; }

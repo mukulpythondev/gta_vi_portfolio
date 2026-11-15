@@ -94,7 +94,16 @@ export default function Home() {
   return (
     <main id="main" className="home">
       <section className={`hero${heroArt ? " has-art" : ""}`} aria-labelledby="hero-title">
-        {heroArt ? <HeroArt desktop={heroArt} mobile={heroArtMobile} /> : <CoastScene />}
+        {heroArt ? (
+          <HeroArt
+            desktop={heroArt}
+            mobile={heroArtMobile}
+            depth={art("art/hero/key-depth")}
+            depthMobile={art("art/hero/key-mobile-depth")}
+          />
+        ) : (
+          <CoastScene />
+        )}
         <Parallax target=".hero" />
         <div className="hero-shade" />
         <div className="hero-grain" />
@@ -273,6 +282,10 @@ export default function Home() {
             <ProjectCard key={project.slug} project={project} />
           ))}
         </div>
+        {/* Phones skip the extra cards; the three big scenes above are enough. */}
+        <Link href="/missions" className="button button-glass operations-more">
+          See all {projects.length} projects <ArrowUpRight size={17} />
+        </Link>
       </section>
 
       <CareerRoad />

@@ -1,6 +1,32 @@
 /** Course certificates, read from github.com/mukulpythondev/Certifications. Each links to Coursera's verification page. */
 export type Certification = { issuer: "Meta" | "Google"; title: string; date: string; verify: string };
 
+/** Proctored professional certifications, shown above the course list. */
+export type ProCertification = {
+  issuer: string;
+  title: string;
+  level: string;
+  issued: string;
+  validUntil: string;
+  badge: string;
+  verify: string;
+  covers: string[];
+};
+
+export const proCertifications: ProCertification[] = [
+  {
+    issuer: "Oracle",
+    title: "OCI 2025 Certified AI Foundations Associate",
+    level: "Oracle Certified · Foundations Associate",
+    issued: "17 Oct 2025",
+    validUntil: "Oct 2027",
+    badge: "/certs/oci-ai-foundations-2025.webp",
+    verify:
+      "https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=9079AD3E2DB0260D0569A1062807EFA4F7AD2480F04D31208713EB0AB82392A0",
+    covers: ["AI and ML fundamentals", "Deep learning", "LLMs and generative AI", "OCI AI services", "Oracle 23ai Select AI"],
+  },
+];
+
 export const certificationsRepo = "https://github.com/mukulpythondev/Certifications";
 
 export const certifications: Certification[] = [

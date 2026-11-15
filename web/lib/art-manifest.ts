@@ -2,6 +2,8 @@
 export const artManifest: Record<string, string> = {
   "art/about/dossier": "/art/about/dossier.webp",
   "art/boot/key": "/art/boot/key.webp",
+  "art/hero/key-depth": "/art/hero/key-depth.webp",
+  "art/hero/key-mobile-depth": "/art/hero/key-mobile-depth.webp",
   "art/hero/key-mobile": "/art/hero/key-mobile.webp",
   "art/hero/key": "/art/hero/key.webp",
   "art/map/key": "/art/map/key.webp",

@@ -290,3 +290,67 @@
 .compact-map {
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
 }
+
+/* ---------- 3D map (full map, motion on) ----------
+   The plane tilts back like a game map camera, pins stand up off it and rise
+   in on arrival, and the camera glides when flying to a district. */
+.map-stage {
+  position: absolute;
+  inset: 0;
+}
+.map-frame.is-3d .map-viewport {
+  perspective: 1200px;
+  perspective-origin: 50% 0%;
+  background: linear-gradient(180deg, #1c0f3d 0%, #2a1050 14%, #0b1d4a 46%);
+}
+.map-frame.is-3d .map-stage {
+  --tilt: 36deg;
+  transform-style: preserve-3d;
+  transform-origin: 50% 60%;
+  transform: translateY(5%) rotateX(calc(var(--tilt) + var(--lean-y, 0) * 4deg))
+    rotateZ(calc(var(--lean-x, 0) * -3deg)) scale(1.16);
+  transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: map-descend 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+@keyframes map-descend {
+  from {
+    transform: translateY(0) rotateX(0deg) rotateZ(0deg) scale(1.5);
+  }
+}
+.map-frame.is-3d :is(.map-canvas, .map-markers) {
+  transform-style: preserve-3d;
+}
+.map-frame.is-flying .map-canvas {
+  transition: transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* Haze toward the horizon. */
+.map-frame.is-3d .map-viewport::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 34%;
+  z-index: 2;
+  background: linear-gradient(180deg, rgb(28 15 61 / 0.95), rgb(28 15 61 / 0));
+  pointer-events: none;
+}
+.map-frame.is-3d :is(.map-marker, .map-dossier) {
+  transform: translate(-50%, -50%) translateZ(22px) rotateX(calc(-1 * var(--tilt)))
+    scale(var(--counter-scale, 1));
+  animation: pin-rise 700ms cubic-bezier(0.2, 0.9, 0.3, 1.3) backwards;
+  animation-delay: calc(500ms + var(--i, 8) * 80ms);
+}
+.map-frame.is-3d .marker-pin {
+  filter: drop-shadow(0 10px 6px rgb(0 0 0 / 0.55));
+}
+@keyframes pin-rise {
+  from {
+    opacity: 0;
+    translate: 0 0 -70px;
+    scale: 0.3;
+  }
+}
+@media (max-width: 700px) {
+  .map-frame.is-3d .map-stage {
+    --tilt: 26deg;
+  }
+}

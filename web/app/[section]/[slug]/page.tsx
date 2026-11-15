@@ -10,7 +10,7 @@ import { projects } from "@/content/projects";
 import { experience } from "@/content/experience";
 import { hackathons } from "@/content/hackathons";
 import { safeHref } from "@/content/socials";
-import { playtime } from "@/components/save-slots";
+import { playtime } from "@/lib/playtime";
 import { DetailList, PageHeading } from "@/components/page-parts";
 import { MissionComplete } from "@/components/hud/mission-complete";
 

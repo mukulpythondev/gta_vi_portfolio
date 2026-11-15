@@ -76,20 +76,12 @@
   .timeline small { font-size: 11px; }
   .mission-head { font-size: 11px; letter-spacing: 0.12em; }
 
-  /* Save slots (home + experience): status pill stays on one line. */
-  .slot-status { white-space: nowrap; letter-spacing: 0.12em; }
-
   /* Tap targets: links in dense lists get at least 44px of height. */
   .related-ops a,
   .district-list a { min-height: 48px; }
 }
 
 @media (max-width: 420px) {
-  .save-slot { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; padding: 16px 14px 16px 12px; }
-  .slot-number { font-size: 34px; }
-  .slot-body strong { font-size: 26px; }
-  .slot-bar { display: none; }
-  .slot-side { grid-template-columns: auto 1fr auto; }
   .footer-actions .button { gap: 6px; padding-inline: 8px; }
   .footer-links { gap: 20px 24px; }
   .footer-links a { font-size: 17px; }

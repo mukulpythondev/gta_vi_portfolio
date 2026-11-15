@@ -34,6 +34,7 @@ import { ScrollReveal } from "./hud/scroll-reveal";
 import { SmoothScroll } from "./hud/smooth-scroll";
 import { TiltCards } from "./tilt-cards";
 import { ExternalLinks } from "./hud/external-links";
+import { PosterFx } from "./poster-fx";
 import { LazyOceanDrive } from "./world/lazy-ocean-drive";
 import { socials } from "@/content/socials";
 
@@ -297,6 +298,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <SmoothScroll />
       <TiltCards />
       <ExternalLinks />
+      <PosterFx />
       {panel === "travel" && (
         <QuickTravel onClose={() => closePanel("travel")} onTerminal={() => setPanel("terminal")} />
       )}

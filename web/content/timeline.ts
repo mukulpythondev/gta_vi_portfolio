@@ -17,14 +17,6 @@ export const timeline: TimelineItem[] = [
     description: "Full stack intern building REST APIs and real-time messaging.",
   },
   {
-    date: "2025",
-    code: "CCJ",
-    place: "NIT Calicut",
-    kind: "Hackathon",
-    title: "Smart India Hackathon National Finalist",
-    description: "Flew to the Grand Finale with an offline multimodal RAG system: no network, cited answers.",
-  },
-  {
     date: "Sep 2025",
     code: "RMT",
     place: "Remote",
@@ -39,6 +31,14 @@ export const timeline: TimelineItem[] = [
     kind: "Hackathon",
     title: "Cardano Hackathon Asia finalist",
     description: "Reached the Asia finals in Bengaluru.",
+  },
+  {
+    date: "Dec 2025",
+    code: "CCJ",
+    place: "NIT Calicut",
+    kind: "Hackathon",
+    title: "Smart India Hackathon National Finalist",
+    description: "Flew to the Grand Finale with an offline multimodal RAG system: no network, cited answers.",
   },
   {
     date: "Dec 2025",

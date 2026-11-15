@@ -28,9 +28,14 @@ const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((notify) => notify());
 
 const now = () => (typeof performance === "undefined" ? 0 : performance.now());
+/** On the home page the hero is the pitch: nothing covers it while it's in view. */
+const heroInView = () => {
+  const hero = document.querySelector<HTMLElement>(".home .hero");
+  return !!hero && hero.getBoundingClientRect().bottom > innerHeight * 0.35;
+};
 const blocked = () =>
   typeof document !== "undefined" &&
-  (document.documentElement.dataset.boot !== "done" || !!document.querySelector("dialog[open]"));
+  (document.documentElement.dataset.boot !== "done" || !!document.querySelector("dialog[open]") || heroInView());
 
 function schedule(delay = 0) {
   clearTimeout(showTimer);

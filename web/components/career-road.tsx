@@ -3,15 +3,15 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { experience } from "@/content/experience";
-import { playtime } from "./save-slots";
+import { playtime } from "@/lib/playtime";
 
 /** Oldest job first, so the road runs left to right through time. */
 const chapters = [...experience].reverse();
 
 /**
- * Career as a road you drive along. On desktop with motion on, the section
- * pins and vertical scrolling moves the road sideways (GTA VI style). Without
- * motion, on phones and in Recruiter mode it is a normal swipeable row.
+ * Career as a road you drive along. With motion on (desktop and phones), the
+ * section pins and vertical scrolling moves the road sideways (GTA VI style).
+ * In Recruiter mode or with motion off it is a normal swipeable row.
  */
 export function CareerRoad() {
   const section = useRef<HTMLElement>(null);
@@ -20,22 +20,27 @@ export function CareerRoad() {
   useEffect(() => {
     const outer = section.current;
     const row = track.current;
+    const stage = outer?.querySelector<HTMLElement>(".road-stage");
     const world = document.querySelector<HTMLElement>(".world");
     if (
       !outer ||
       !row ||
+      !stage ||
       world?.dataset.motion !== "on" ||
       world.dataset.mode === "recruiter" ||
-      matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      !matchMedia("(min-width: 900px)").matches
+      matchMedia("(prefers-reduced-motion: reduce)").matches
     )
       return;
     let distance = 0;
     let frame = 0;
+    let width = 0;
     const measure = () => {
+      width = innerWidth;
       distance = Math.max(0, row.scrollWidth - innerWidth);
-      // Pinned for as long as it takes to drive the whole road.
-      outer.style.height = `${innerHeight + distance}px`;
+      // Pinned for as long as it takes to drive the whole road. The stage is
+      // 100svh, which (unlike innerHeight) stays put when a phone's address
+      // bar slides away, so the section doesn't jump mid-scroll.
+      outer.style.height = `${stage.offsetHeight + distance}px`;
     };
     const update = () => {
       frame = 0;
@@ -51,7 +56,9 @@ export function CareerRoad() {
     measure();
     update();
     const onResize = () => {
-      measure();
+      // Phones fire resize when the address bar shows or hides; only a real
+      // width change (rotation, window resize) needs a new measurement.
+      if (innerWidth !== width) measure();
       request();
     };
     addEventListener("scroll", request, { passive: true });

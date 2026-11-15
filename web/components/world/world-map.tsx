@@ -12,6 +12,7 @@ import {
 import { districts, discoveredDistricts, type District } from "@/content/navigation";
 import { world } from "@/content/world";
 import { useGame } from "@/lib/game-store";
+import { useMotionAllowed } from "@/lib/use-motion-allowed";
 import { audioManager } from "@/lib/audio-manager";
 import { DistrictIcon } from "../icons";
 import { art } from "@/lib/art";
@@ -29,8 +30,14 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
   const [active, setActive] = useState<District | null>(null);
   const [view, setView] = useState<View>({ x: 0, y: 0, scale: 1 });
   const viewport = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const drag = useRef<{ x: number; y: number; vx: number; vy: number; dist: number; scale: number; moved: boolean } | null>(null);
+  // Full map with motion on: the plane tilts into 3D, pins stand up, and the
+  // camera flies to districts picked from the list.
+  const tilted = useMotionAllowed() && !compact;
+  const [flying, setFlying] = useState(false);
+  const flyTimer = useRef(0);
 
   const clamp = useCallback((next: View): View => {
     const box = viewport.current?.getBoundingClientRect();
@@ -67,6 +74,26 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
     setActive(item);
   };
 
+  /** Glides the camera to a point on the map (percent coords), or back out. */
+  const fly = (to: { x: number; y: number } | null) => {
+    const element = viewport.current;
+    if (!tilted || !element) return;
+    window.clearTimeout(flyTimer.current);
+    setFlying(true);
+    flyTimer.current = window.setTimeout(() => setFlying(false), 900);
+    if (!to) return setView({ x: 0, y: 0, scale: 1 });
+    const scale = 1.8;
+    setView(
+      clamp({
+        scale,
+        x: (0.5 - to.x / 100) * element.offsetWidth * scale,
+        y: (0.5 - to.y / 100) * element.offsetHeight * scale,
+      }),
+    );
+  };
+
+  useEffect(() => () => window.clearTimeout(flyTimer.current), []);
+
   const spawn = pt(SPAWN);
   const target = active ? pt(active) : null;
   const route = target
@@ -75,7 +102,7 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
 
   return (
     <div className={`map-layout ${compact ? "compact-map" : ""}`}>
-      <div className="map-frame">
+      <div className={`map-frame${tilted ? " is-3d" : ""}${flying ? " is-flying" : ""}`}>
         <div className="map-hud-top" aria-hidden="true">
           <span>{world.code} / 001 · FICTIONAL CITY</span>
           <span>
@@ -107,6 +134,12 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
             };
           }}
           onPointerMove={(event) => {
+            if (tilted && event.pointerType === "mouse" && stage.current) {
+              // The tilted plane leans a little toward the cursor.
+              const box = event.currentTarget.getBoundingClientRect();
+              stage.current.style.setProperty("--lean-x", ((event.clientX - box.left) / box.width - 0.5).toFixed(3));
+              stage.current.style.setProperty("--lean-y", ((event.clientY - box.top) / box.height - 0.5).toFixed(3));
+            }
             if (!drag.current || !pointers.current.has(event.pointerId)) return;
             pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
             const list = [...pointers.current.values()];
@@ -132,8 +165,13 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
             pointers.current.delete(event.pointerId);
             drag.current = null;
           }}
+          onPointerLeave={() => {
+            stage.current?.style.removeProperty("--lean-x");
+            stage.current?.style.removeProperty("--lean-y");
+          }}
           onDoubleClick={compact ? undefined : () => zoom(1.5)}
         >
+          <div ref={stage} className="map-stage">
           <div
             className="map-canvas"
             style={{
@@ -187,7 +225,7 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
                 event.preventDefault();
               }}
             >
-              {districts.map((item) => {
+              {districts.map((item, index) => {
                 const known = discovered.includes(item.href);
                 return (
                   <Link
@@ -198,10 +236,15 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
                       left: `${item.x}%`,
                       top: `${item.y}%`,
                       ["--counter-scale" as string]: 1 / view.scale,
+                      ["--i" as string]: index,
                     }}
                     aria-label={`${item.district}: ${item.professional}${known ? "" : " (undiscovered)"}`}
                     onPointerEnter={() => focusDistrict(item)}
-                    onFocus={() => focusDistrict(item)}
+                    onFocus={(event) => {
+                      focusDistrict(item);
+                      // Keyboard only: flying on a mouse click would move the pin away mid-click.
+                      if (event.currentTarget.matches(":focus-visible")) fly(item);
+                    }}
                     onClick={(event) => {
                       if (drag.current?.moved) event.preventDefault();
                     }}
@@ -214,6 +257,7 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
                 );
               })}
             </div>
+          </div>
           </div>
           <Compass className="compass" size={34} aria-hidden="true" />
         </div>
@@ -228,7 +272,7 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
             <button
               className="icon-button"
               aria-label="Recenter map"
-              onClick={() => setView({ x: 0, y: 0, scale: 1 })}
+              onClick={() => (tilted ? fly(null) : setView({ x: 0, y: 0, scale: 1 }))}
             >
               <LocateFixed size={18} />
             </button>
@@ -256,7 +300,7 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
           )}
         </div>
       </div>
-      <div className="district-list">
+      <div className="district-list" onPointerLeave={() => fly(null)}>
         {districts.map((item, index) => {
           const known = discovered.includes(item.href);
           return (
@@ -264,7 +308,10 @@ export function WorldMap({ compact = false }: { compact?: boolean }) {
               href={item.href}
               key={item.href}
               className={known ? "is-known" : "is-unknown"}
-              onPointerEnter={() => focusDistrict(item)}
+              onPointerEnter={() => {
+                focusDistrict(item);
+                fly(item);
+              }}
             >
               <span className="district-number">0{index + 1}</span>
               <DistrictIcon name={item.icon} />
