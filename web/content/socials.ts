@@ -10,7 +10,7 @@ export const socials: {
     href: "https://www.linkedin.com/in/mukul-webdev",
     kind: "linkedin",
   },
-  { label: "Download resume", href: "/Mukul_Rana_Resume.pdf", kind: "resume" },
+  { label: "Choose resume", href: "/resume", kind: "resume" },
 ];
 export function safeHref(value: string | null): string | null {
   if (!value) return null;

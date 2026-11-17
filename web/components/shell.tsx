@@ -231,9 +231,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <a className="button button-primary" href={email}>
               <Mail size={17} /> Email me
             </a>
-            <a className="button button-glass" href="/Mukul_Rana_Resume.pdf" download>
+            <Link className="button button-glass" href="/resume">
               <Download size={16} /> Resume
-            </a>
+            </Link>
             <a className="button button-glass" href={github} target="_blank" rel="noreferrer">
               <Code2 size={16} /> GitHub
             </a>
@@ -270,21 +270,21 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </div>
       </footer>
       <nav className="mobile-dock" aria-label="Mobile navigation">
-        <Link href="/map" aria-current={current("/map")}>
-          <Map size={19} />
-          Map
-        </Link>
         <Link href="/missions" aria-current={current("/missions")}>
-          <Gamepad2 size={19} />
+          <Code2 size={19} />
           Projects
         </Link>
-        <button onClick={() => setPanel("travel")}>
-          <LayoutGrid size={19} />
-          Travel
-        </button>
+        <Link href="/experience" aria-current={current("/experience")}>
+          <BriefcaseBusiness size={19} />
+          Experience
+        </Link>
+        <Link href="/resume" aria-current={current("/resume")}>
+          <Download size={19} />
+          Resume
+        </Link>
         <Link href="/contact" aria-current={current("/contact")}>
-          <Phone size={19} />
-          Phone
+          <Mail size={19} />
+          Contact
         </Link>
       </nav>
       {game && <HudOverlay />}

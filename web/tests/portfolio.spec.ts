@@ -225,8 +225,17 @@ test("metadata, sitemap, and robots are served", async ({ page, request }) => {
 
 test("boot sequence plays once per session and can be skipped", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.goto("/");
+  if (testInfo.project.name === "mobile") {
+    await expect(page.locator(".boot")).toHaveCount(0);
+    await expect(page.getByRole("dialog", { name: "Main menu" })).toHaveCount(0);
+    await expect(page.locator("main h1")).toBeVisible();
+    await page.goto("/experience/asr-aviation");
+    await expect(page.locator(".boot")).toHaveCount(0);
+    await expect(page.locator("main")).toContainText("Django");
+    return;
+  }
   const boot = page.getByRole("dialog", { name: "Intro" });
   await expect(boot).toBeVisible();
   await page.getByRole("button", { name: "Press start" }).first().click();
@@ -334,7 +343,7 @@ test("footer carries the calls to action", async ({ page }) => {
   await page.goto("/");
   const footer = page.locator("footer");
   await expect(footer.getByRole("link", { name: "Email me" })).toHaveAttribute("href", /^mailto:/);
-  await expect(footer.getByRole("link", { name: "Resume" })).toHaveAttribute("href", "/Mukul_Rana_Resume.pdf");
+  await expect(footer.getByRole("link", { name: "Resume" })).toHaveAttribute("href", "/resume");
   await expect(footer.getByRole("link", { name: "Story" })).toHaveAttribute("href", "/about#story");
 });
 
@@ -347,4 +356,77 @@ test("hackathons are a flat list and certifications link to verification", async
   await page.goto("/achievements");
   await expect(page.locator(".cert-card")).toHaveCount(10);
   await expect(page.locator(".cert-card a").first()).toHaveAttribute("href", /coursera\.org\/verify\//);
+});
+
+test("mobile reading stays vertical with direct, usable navigation", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "phone layout only");
+  for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 760, height: 600 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    await expect(page.locator(".career-road")).not.toHaveClass(/is-pinned/);
+    await expect(page.locator(".scene").first()).toHaveCSS("position", "relative");
+    const layout = await page.evaluate(() => {
+      const cards = [...document.querySelectorAll(".road-stop")].map((card) => card.getBoundingClientRect());
+      const links = [...document.querySelectorAll(".mobile-dock a")].map((link) => link.getBoundingClientRect());
+      return {
+        overflow: document.documentElement.scrollWidth > innerWidth,
+        stacked: cards.every((card, index) => index === 0 || card.top >= cards[index - 1].bottom),
+        targets: links.every((link) => link.width >= 44 && link.height >= 44),
+      };
+    });
+    expect(layout).toEqual({ overflow: false, stacked: true, targets: true });
+    if (viewport.width <= 420) {
+      // Wait for the existing hero entrance transform before measuring.
+      await expect.poll(() => page.evaluate(() => {
+        const actions = document.querySelector(".hero-actions")!.getBoundingClientRect();
+        const dock = document.querySelector(".mobile-dock")!.getBoundingClientRect();
+        return actions.bottom <= dock.top;
+      })).toBe(true);
+    }
+  }
+  const nav = page.getByRole("navigation", { name: "Mobile navigation" });
+  for (const [name, route] of [["Projects", "/missions"], ["Experience", "/experience"], ["Resume", "/resume"], ["Contact", "/contact"]]) {
+    await nav.getByRole("link", { name, exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`${route}$`));
+    await expect(nav.getByRole("link", { name, exact: true })).toHaveAttribute("aria-current", "page");
+    await expect(page.locator("main h1")).toBeVisible();
+  }
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Quick travel" })).toBeVisible();
+});
+
+test("career pinning responds to viewport and motion preferences", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "desktop transition coverage");
+  await page.goto("/");
+  const road = page.locator(".career-road");
+  await expect(road).toHaveClass(/is-pinned/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(road).not.toHaveClass(/is-pinned/);
+  await expect(road).not.toHaveAttribute("style", /height/);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(road).toHaveClass(/is-pinned/);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(road).not.toHaveClass(/is-pinned/);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(road).toHaveClass(/is-pinned/);
+  await page.getByRole("button", { name: "Recruiter mode", exact: true }).click();
+  await expect(road).not.toHaveClass(/is-pinned/);
+});
+
+test("both role resumes download as PDFs", async ({ page, request }) => {
+  await page.goto("/resume");
+  for (const [role, path] of [
+    ["GenAI Engineer", "/Mukul_Rana_GenAI_Engineer_Resume.pdf"],
+    ["Software Engineer", "/Mukul_Rana_Software_Engineer_Resume.pdf"],
+  ]) {
+    const link = page.getByRole("link", { name: `${role} resume`, exact: true });
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute("href", path);
+    const [download] = await Promise.all([page.waitForEvent("download"), link.click()]);
+    expect(await download.failure()).toBeNull();
+    const response = await request.get(path);
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toContain("application/pdf");
+    expect((await response.body()).subarray(0, 5).toString()).toBe("%PDF-");
+  }
 });

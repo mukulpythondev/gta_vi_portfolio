@@ -1,0 +1,100 @@
+% One-page GenAI Engineer resume. Compile with pdfLaTeX or Tectonic.
+\documentclass[letterpaper,10pt]{article}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+  \input{glyphtounicode}
+  \pdfgentounicode=1
+\else
+  \usepackage{fontspec}
+  \setmainfont{lmroman10-regular.otf}[
+    BoldFont=lmroman10-bold.otf,
+    ItalicFont=lmroman10-italic.otf,
+    BoldItalicFont=lmroman10-bolditalic.otf,
+    Ligatures=NoCommon]
+\fi
+\usepackage[margin=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,urlcolor=blue!65!black,linkcolor=blue!65!black]{hyperref}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{5pt}{3pt}
+\setlist[itemize]{leftmargin=13pt,noitemsep,topsep=1pt,parsep=0pt,partopsep=0pt}
+\newcommand{\entry}[4]{%
+  \textbf{#1}\hfill #2\\
+  \textit{#3}\hfill #4\par
+}
+
+\begin{document}
+\fontsize{10.5pt}{12.3pt}\selectfont
+\raggedright
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\begin{center}
+{\LARGE\textbf{Mukul Rana}}\\[2pt]
+\textbf{GenAI Engineer | RAG, Multimodal Retrieval \& AI Backends}\\[1pt]
+Delhi, India | \href{tel:+918882894356}{+91-8882894356} |
+\href{mailto:devmukulrana@gmail.com}{devmukulrana@gmail.com}\\
+\href{https://mukulranadev.in}{Portfolio} |
+\href{https://linkedin.com/in/mukul-webdev}{LinkedIn} |
+\href{https://github.com/mukulpythondev}{GitHub}
+\end{center}
+\vspace{-8pt}
+
+\section*{Experience}
+\entry{FirstHuman Tech}{Dec 2025 -- Present}{Software Engineer | Remote, Australia}{}
+\begin{itemize}
+  \item Built retrieval over \textbf{5,000+ enterprise documents} using embeddings and vector search; improved retrieval quality through chunking strategy and re-ranking.
+  \item Shipped a handwriting OCR pipeline on Azure Document Intelligence for semi-structured enterprise forms.
+  \item Built FastAPI, PostgreSQL, Redis and Kafka services for concurrent document ingestion and reliable reprocessing.
+\end{itemize}
+\vspace{3pt}
+\entry{ASR Aviation Pvt. Ltd.}{Sep 2025 -- Nov 2025}{Software Engineering Intern | Remote}{}
+\begin{itemize}
+  \item Migrated legacy Node.js services to Django (Python), improving maintainability and API consistency across modules.
+  \item Containerized applications with Docker; configured Nginx routing/load balancing, Gunicorn and GitHub Actions CI/CD for Linux deployments.
+  \item Debugged backend services with QA/design teams and documented production deployment on Ubuntu/RHEL.
+\end{itemize}
+\vspace{3pt}
+\entry{IABTM}{Sep 2024 -- Mar 2025}{Full Stack Developer Intern | Remote}{}
+\begin{itemize}
+  \item Built Node.js, Express and MongoDB services with Redis/Valkey caching and queues, \textbf{reducing API response times by 25\%}.
+  \item Developed low-latency audio/video webinar sessions with mediasoup; implemented role-based JWT access control and unit tests.
+  \item Led backend reviews and debugging sessions, \textbf{reducing bug resolution time by 20\%}.
+\end{itemize}
+
+\section*{Projects}
+\entry{Offline Multimodal RAG}{\href{https://github.com/mukulpythondev/sih}{GitHub}}{Python, FastAPI, FAISS, Neo4j, MongoDB, CLIP, Whisper, Local LLMs}{}
+\begin{itemize}
+  \item Built offline retrieval across documents, images and audio using OCR, CLIP embeddings and Whisper transcripts.
+  \item Fused parallel vector, graph and document search with Reciprocal Rank Fusion; generated local-LLM answers with page, image-region and audio-timestamp citations.
+\end{itemize}
+\vspace{3pt}
+\entry{MicroRAG}{\href{https://github.com/mukulpythondev/microRAG}{GitHub}}{FastAPI, LangGraph, LangSmith, Valkey, Docker, AWS EC2}{}
+\begin{itemize}
+  \item Built a four-service resume/job analysis pipeline with a LangGraph orchestrator, asynchronous Valkey jobs and end-to-end LangSmith tracing; deployed on AWS EC2 through GitHub Actions.
+\end{itemize}
+
+\section*{Technical Skills}
+\textbf{GenAI:} Retrieval-Augmented Generation (RAG), embeddings, hybrid search, re-ranking, FAISS, Qdrant, LangChain, LangGraph, agents \& tool calling, Model Context Protocol (MCP), LangSmith evals \& tracing\\[2pt]
+\textbf{Languages \& Backend:} Python, SQL, JavaScript/TypeScript, FastAPI, Django, Node.js, REST APIs\\[2pt]
+\textbf{Data \& Infrastructure:} PostgreSQL, MongoDB, Neo4j, Redis/Valkey, Kafka, Docker, AWS (EC2, S3), Azure Document Intelligence, Linux, GitHub Actions
+
+\section*{Education}
+\textbf{IMS Engineering College} --- B.Tech, Computer Science \hfill 2023 -- 2027 (expected)\\
+SGPA: 7.9\\
+Coursework: Data Structures \& Algorithms, Operating Systems, DBMS, Computer Networks, AI
+
+\section*{Achievements \& Certifications}
+\begin{itemize}
+  \item \textbf{Oracle OCI 2025 Certified AI Foundations Associate} (Oct 2025).
+  \href{https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=9079AD3E2DB0260D0569A1062807EFA4F7AD2480F04D31208713EB0AB82392A0}{Verify}
+  \item \textbf{Smart India Hackathon 2025 National Finalist}; \textbf{Cardano Hackathon Asia Finalist} (2025); 30+ hackathon finalist; 3x hackathon winner.
+  \item \textbf{Judge, Hack Better Than Me national hackathon}, IIIT Pune (2026); 500+ LeetCode problems solved.
+\end{itemize}
+\end{document}

@@ -55,7 +55,7 @@ export const viewport: Viewport = { themeColor: "#12061f" };
  * Runs before paint: restores mode/motion and decides whether the boot
  * sequence should play, so the first frame is already correct.
  */
-const bootScript = `(()=>{try{var d=document.documentElement,p=JSON.parse(localStorage.getItem("solara-preferences")||localStorage.getItem("leonida-preferences")||"null")||{};d.dataset.mode=p.mode==="recruiter"?"recruiter":"game";d.dataset.motion=p.motion===false?"off":"on";d.dataset.explain=localStorage.getItem("solara-explain")==="tech"?"tech":"plain";var h=new Date().getHours();d.dataset.time=h>=20||h<5?"night":"dusk";if(sessionStorage.getItem("solara-booted")||p.mode==="recruiter"||matchMedia("(prefers-reduced-motion: reduce)").matches)d.dataset.boot="done";}catch(e){document.documentElement.dataset.boot="done"}})()`;
+const bootScript = `(()=>{try{var d=document.documentElement,p=JSON.parse(localStorage.getItem("solara-preferences")||localStorage.getItem("leonida-preferences")||"null")||{};d.dataset.mode=p.mode==="recruiter"?"recruiter":"game";d.dataset.motion=p.motion===false?"off":"on";d.dataset.explain=localStorage.getItem("solara-explain")==="tech"?"tech":"plain";var h=new Date().getHours();d.dataset.time=h>=20||h<5?"night":"dusk";if(sessionStorage.getItem("solara-booted")||p.mode==="recruiter"||matchMedia("(max-width: 760px)").matches||matchMedia("(prefers-reduced-motion: reduce)").matches)d.dataset.boot="done";}catch(e){document.documentElement.dataset.boot="done"}})()`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

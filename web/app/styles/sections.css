@@ -1043,6 +1043,15 @@
   font-weight: 900;
   font-style: italic;
 }
+.resume-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.resume-downloads .button {
+  min-width: 0;
+  min-height: 48px;
+}
 .resume-pending {
   padding: 22px;
   border-radius: 14px;

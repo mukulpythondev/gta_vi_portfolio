@@ -14,15 +14,15 @@ export const timeline: TimelineItem[] = [
     place: "Remote",
     kind: "Work",
     title: "First remote role at IABTM",
-    description: "Full stack intern building REST APIs and real-time messaging.",
+    description: "Built webinar backends and mediasoup audio/video sessions; caching and queues reduced API response times by 25%.",
   },
   {
     date: "Sep 2025",
     code: "RMT",
     place: "Remote",
     kind: "Work",
-    title: "Software engineering intern at ASR Aviation",
-    description: "Profiled slow queries and endpoints, then containerised services on Kubernetes.",
+    title: "Software engineering intern at ASR Aviation Pvt. Ltd.",
+    description: "Migrated Node.js services to Django and automated Docker deployments with Nginx, Gunicorn and GitHub Actions.",
   },
   {
     date: "Nov 2025",

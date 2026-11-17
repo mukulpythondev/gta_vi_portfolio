@@ -32,6 +32,8 @@
 Every page is a district on a map of a fictional city. Projects are *operations*, roles are *mission files* on a road, skills are an *armory*, awards hang on a *trophy wall*. A boot screen, HUD, minimap, toasts, pause menu, quick-travel wheel and painted scenery make it feel like a game, while every word stays a real, checkable fact about the work.
 
 - **Two modes.** Game mode (default) and Recruiter mode: same content, no effects, plain navigation.
+- **Direct access on phones.** At 760px and below, shared links skip the boot/main-menu gate. Projects, Experience, Resume and Contact are one tap away; featured projects and career cards scroll vertically without pinning. Desktop keeps the cinematic experience.
+- **Role-specific resumes.** Download one-page Software Engineer and GenAI Engineer PDFs from the Resume page; editable sources and regeneration instructions are in [content editing](docs/content-editing.md#resume).
 - **Explain it simply or technically.** Every project has a one-line plain-English version and a technical one; one toggle swaps them site-wide.
 - **Fast and accessible.** Static pages, Lighthouse mobile 91–92 performance and 100 accessibility / best practices / SEO (see [deployment](docs/deployment.md#speed-2026-11-14)); axe accessibility scans in the tests; respects reduced motion.
 - **Content is data.** Everything lives in typed files under `web/content/`; media is picked up from folders.

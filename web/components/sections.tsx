@@ -371,16 +371,24 @@ export function PortfolioSection({ section }: { section: string }) {
             {safeHref(
               socials.find((item) => item.kind === "resume")?.href ?? null,
             ) ? (
-              <a
-                className="button button-primary"
-                href={safeHref(
-                  socials.find((item) => item.kind === "resume")!.href,
-                )!}
-                download
-              >
-                <Download size={17} />
-                Download resume
-              </a>
+              <div className="resume-downloads">
+                <a
+                  className="button button-primary"
+                  href="/Mukul_Rana_GenAI_Engineer_Resume.pdf"
+                  download
+                >
+                  <Download size={17} />
+                  GenAI Engineer resume
+                </a>
+                <a
+                  className="button button-glass"
+                  href="/Mukul_Rana_Software_Engineer_Resume.pdf"
+                  download
+                >
+                  <Download size={17} />
+                  Software Engineer resume
+                </a>
+              </div>
             ) : (
               <div className="resume-pending">
                 <p className="eyebrow">DOCUMENT NOT YET SUPPLIED</p>

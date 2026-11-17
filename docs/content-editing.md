@@ -54,4 +54,25 @@ Prompts for every art slot are in [art/prompts.md](art/prompts.md). Save generat
 
 ## Resume
 
-Replace `web/public/Mukul_Rana_Resume.pdf` with the same name.
+Two single-column, one-page resumes have standalone LaTeX sources:
+
+- [Software Engineer](resumes/Mukul_Rana_Software_Engineer_Resume.tex): backend services, migrations, deployment and performance.
+- [GenAI Engineer](resumes/Mukul_Rana_GenAI_Engineer_Resume.tex): enterprise retrieval, OCR, multimodal RAG and AI pipelines.
+
+Edit the `.tex` files, then regenerate from `web/` with [Tectonic](https://tectonic-typesetting.github.io/) installed:
+
+```sh
+node scripts/build-resumes.mjs
+```
+
+Set `TECTONIC_PATH` to the compiler executable if it is not on PATH.
+Each standalone source also compiles with pdfLaTeX (including Overleaf).
+The script writes both role PDFs to `web/public/`. General Resume links open `/resume`,
+where visitors choose the GenAI Engineer or Software Engineer PDF.
+After edits, check that **each PDF is exactly one page**, text is selectable, links work,
+and the Achievements section is not clipped. Do not add unverified metrics.
+The templates use standard headings, selectable text, Unicode-compatible fonts,
+and no icons, tables, or sidebars. Role-specific keywords should match demonstrated
+experience; an ATS score cannot be guaranteed without a target job description.
+
+Experience changes should also be reflected in `timeline.ts` and these resume sources.

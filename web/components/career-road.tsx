@@ -1,34 +1,42 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { experience } from "@/content/experience";
 import { playtime } from "@/lib/playtime";
+import { useMotionAllowed } from "@/lib/use-motion-allowed";
 
 /** Oldest job first, so the road runs left to right through time. */
 const chapters = [...experience].reverse();
+const desktopQuery = "(min-width: 761px)";
 
-/**
- * Career as a road you drive along. With motion on (desktop and phones), the
- * section pins and vertical scrolling moves the road sideways (GTA VI style).
- * In Recruiter mode or with motion off it is a normal swipeable row.
- */
+function subscribeDesktop(callback: () => void) {
+  const media = matchMedia(desktopQuery);
+  media.addEventListener("change", callback);
+  return () => media.removeEventListener("change", callback);
+}
+
+/** Desktop drives the road sideways; phones read the same cards vertically. */
 export function CareerRoad() {
   const section = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
+  const motionAllowed = useMotionAllowed();
+  const desktop = useSyncExternalStore(
+    subscribeDesktop,
+    () => matchMedia(desktopQuery).matches,
+    () => false,
+  );
 
   useEffect(() => {
     const outer = section.current;
     const row = track.current;
     const stage = outer?.querySelector<HTMLElement>(".road-stage");
-    const world = document.querySelector<HTMLElement>(".world");
     if (
       !outer ||
       !row ||
       !stage ||
-      world?.dataset.motion !== "on" ||
-      world.dataset.mode === "recruiter" ||
-      matchMedia("(prefers-reduced-motion: reduce)").matches
+      !motionAllowed ||
+      !desktop
     )
       return;
     let distance = 0;
@@ -71,7 +79,7 @@ export function CareerRoad() {
       outer.style.height = "";
       row.style.transform = "";
     };
-  }, []);
+  }, [motionAllowed, desktop]);
 
   return (
     <section ref={section} className="career-road" aria-labelledby="road-title">
